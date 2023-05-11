@@ -10,5 +10,6 @@ var LANGUAGE = {
     "focus": "Focus op het document.",
     "approval_prompt": "Is het document goed zichtbaar?",
     "retry": "Probeer opnieuw",
-    "confirm": "Accepteer"
+    "confirm": "Accepteer",
+    "capture_error": "We konden geen afbeelding vastleggen.\nToegang tot de camera is vereist.",
 }

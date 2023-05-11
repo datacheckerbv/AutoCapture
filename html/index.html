@@ -22,6 +22,11 @@
         LANGUAGE: 'nl',
         onComplete: function (data) {
             console.log(data)
+        },
+        onError: function(error) {
+            console.log(error)
+            AC.stop();
+            AC.alert(error)
         }
     }).then(() => {
         // Tap to start

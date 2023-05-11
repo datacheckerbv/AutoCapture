@@ -136,6 +136,11 @@ File present under `html/index.html`
         LANGUAGE: 'nl',
         onComplete: function (data) {
             console.log(data)
+        },
+        onError: function(error) {
+            console.log(error)
+            FV.stop();
+            FV.alert(error)
         }
     }).then(() => {
         // Tap to start
@@ -178,7 +183,8 @@ var LANGUAGE = {
     "focus": "Focus on document.",
     "approval_prompt": "Is the image right?",
     "retry": "Try again",
-    "confirm": "Accept"
+    "confirm": "Accept",
+    "capture_error": "We konden geen afbeelding vastleggen.\nToegang tot de camera is vereist.",
 }
 ```
 
