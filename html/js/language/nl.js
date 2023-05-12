@@ -1,5 +1,8 @@
 var LANGUAGE = {
     "start_prompt": "Tik om te starten.",
+    "flip": "Draai het document om,\ntik om te starten.",
+    "flip_frontside": "Draai het document naar de voorkant,\ntik om te starten.",
+    "flip_backside": "Draai het document naar de achterkant,\ntik om te starten.",
     "std_msg_0": "Vul het voorbeeldvenster.",
     "std_msg_1": "De 4 hoeken van het document zijn \nniet gedetecteerd. Gebruik een \nzwarte ondergrond voor het contrast.",
     "exp_dark": "Het beeld is te donker.\nVind een omgeving met meer licht.",
