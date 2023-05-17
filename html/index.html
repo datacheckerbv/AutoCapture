@@ -9,30 +9,9 @@
 </head>
 
 <body>
-    <div></div>
     <div id="AC_mount"></div>
 </body>
 
 <script src="js/autocapture.obf.js" type="text/javascript"></script>
-
-<script>
-    let AC = new Autocapture();
-    AC.init({
-        CONTAINER_ID: 'AC_mount',
-        LANGUAGE: 'nl',
-        onComplete: function (data) {
-            console.log(data)
-        },
-        onError: function(error) {
-            console.log(error)
-            AC.stop();
-            AC.alert(error)
-        }
-    }).then(() => {
-        // Tap to start
-        document.addEventListener('touchstart', AC.start)
-        window.onclick = AC.start
-    });
-</script>
 
 </html>

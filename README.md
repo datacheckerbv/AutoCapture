@@ -109,7 +109,7 @@ Load script.
 
 ## Demo
 
-File present under `html/index.html`
+File present under `html/examples/index.html`
 
 ```html
 <!DOCTYPE html>
@@ -117,30 +117,30 @@ File present under `html/index.html`
 <head>
 <meta charset="utf-8">
 <title>AutoCapture</title>
-<link href="css/global.css" rel="stylesheet" type="text/css" />
+<link href="../css/global.css" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
 
 <body>
-    <div></div>
     <div id="AC_mount"></div>
 </body>
 
-<script src="js/autocapture.obf.js" type="text/javascript"></script>
+<script src="../js/autocapture.obf.js" type="text/javascript"></script>
 
 <script>
     let AC = new Autocapture();
     AC.init({
         CONTAINER_ID: 'AC_mount',
         LANGUAGE: 'nl',
+        ROOT: "../",
         onComplete: function (data) {
             console.log(data)
         },
         onError: function(error) {
             console.log(error)
-            FV.stop();
-            FV.alert(error)
+            AC.stop();
+            AC.alert(error)
         }
     }).then(() => {
         // Tap to start
@@ -150,6 +150,7 @@ File present under `html/index.html`
 </script>
 
 </html>
+
 ```
 
 ## Languages
