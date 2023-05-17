@@ -92,7 +92,7 @@ AC.init({
 CSS stylesheet.
 
 ```html
-<link href="css/global.css" rel="stylesheet" type="text/css" />
+<link href="css/autocapture.css" rel="stylesheet" type="text/css" />
 ```
 
 The meta tags below are required to view the tool properly.
@@ -118,7 +118,7 @@ File present under `html/examples/index.html`
 <head>
 <meta charset="utf-8">
 <title>AutoCapture</title>
-<link href="../css/global.css" rel="stylesheet" type="text/css" />
+<link href="../css/autocapture.css" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
