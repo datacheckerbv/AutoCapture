@@ -35,6 +35,7 @@ To run this tool, you will need initialise with the following variables.
 | `MODELS_PATH`   | string      | `"models/"`              | `"models/"`                          | Path referring to models location.                                                                               |
 | `APPROVAL` | bool      | `false`             | `false`                                   | Approval screen after capture as an extra quality check.                                                                  |
 | `GLARE_LIVE_CHECK`           | bool    |     `true`     | `true` | Enable glare detection.                                                     |
+| `CROP_CARD`           | bool    |     `false`     | `false` | Enable cropping of card as output.                                                     |
 | `MRZ`           | bool      |        `false`           | `false`                                 | Enable MRZ scanning.                                                                                        |
 | `MRZ_RETRIES`           | int      |        `5`           | `5`                                 | Amount of retries of MRZ scanning.                                                                                            |
 | `ROOT`            | string      | `""`               | `"../"`                  | Root location.          |
