@@ -26,7 +26,6 @@ To run this tool, you will need initialise with the following variables.
 | `CROP_CARD`        | bool                | `false`                                | `false`                                   | **optional**<br> Enable cropping of card as output.                       |
 | `GLARE_LIVE_CHECK` | bool                | `true`                                 | `true`                                    | **optional**<br> Enable glare detection.                                  |
 | `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | **required**<br> Notifications in specific language.                      |
-| `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | Notifications in specific language.                                       |
 | `MODELS_PATH`      | string              | `"models/"`                            | `"models/"`                               | **optional**<br> Path referring to models location.                       |
 | `MRZ_SETTINGS`     | object              | see [MRZ_SETTINGS](#mrz_settings)      | see [MRZ_SETTINGS](#mrz_settings)         | **optional**<br> Settings of MRZ scanning.                                |
 | `MRZ`              | bool                | `false`                                | `false`                                   | **optional**<br> Enable MRZ scanning.                                     |
