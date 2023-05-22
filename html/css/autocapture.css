@@ -2,7 +2,7 @@ body, div, p {
     font: 400 14px/22px Roboto,sans-serif;
 }
 canvas, img, video {
-    border: 1px solid black;
+    border: none;
     position: absolute;
 }
 td {
@@ -39,9 +39,6 @@ button[disabled] {
     box-shadow: none;
     opacity: .65;
 }
-.control {
-    margin-bottom: 3px;
-}
 .err {
     color: red;
     font-weight: bold;
@@ -77,15 +74,6 @@ button[disabled] {
     top: 0px;
 }
 
-#bodyContainer {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    z-index: 1000;
-}
-
 #videoContainer {
     width: 100%;
     height: 100%;
@@ -99,13 +87,8 @@ button[disabled] {
 
 
 #alertContainer {
-    justify-content: center;
-    align-items: center;
     display: flex;
-    height: 100vh;
-    width: 100vw;
-    z-index: 1003;
-    position: absolute;
+    flex-direction: column;
 }
 
 
@@ -122,23 +105,6 @@ button[disabled] {
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
     padding: 0.05em 0.3em 0.05em 0.3em;
-}
-
-#header {
-    display: flex;
-    width: 100%;
-    height: 54px;
-    background-color: #1d3461;
-}
-
-#menu {
-    display: flex;
-    width: 100%;
-    height: 54px;
-    background-color: #1d3461;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
 }
 
 #pbar_container {
@@ -201,11 +167,6 @@ video {
     display: block;
     object-fit: cover;
     position: relative;
-}
-
-
-canvas, img, video {
-    border: None;
 }
 
 body {
@@ -400,6 +361,81 @@ html {
     position: absolute;
 }
 
+.exit {
+    position: absolute;
+    left: 20px;
+    top: 3%;
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+  }
+  .exit:before, .exit:after {
+    position: absolute;
+    left: 10px;
+    content: ' ';
+    height: 20px;
+    width: 2px;
+    background-color: #ffffff;
+  }
+  .exit:before {
+    transform: rotate(45deg);
+  }
+  .exit:after {
+    transform: rotate(-45deg);
+  }
+
+  /* CSS for the round capture button */
+  .capture-button {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid white;
+    position: relative;
+  }
+
+  .capture-button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  .capture-button:active::after {
+    width: 45px;
+    height: 45px;
+  }
+
+  #capture-button-container {
+    display: none;
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+  }
+
+  #capture-button-center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+
+
+
+  #start-button-container {
+    display: none;
+  }
+
+  #start-button {
+    background-color: #1d3461
+  }
+
 @keyframes checkmark {
     0% {
         height: 0;
@@ -424,16 +460,16 @@ html {
 }
 
 #footer_container {
-    height: 100%;
+    /* height: 100%; */
     display: flex;
     width: 100%;
     position: absolute;
-    top: 0;
+    bottom: 0;
 }
 #footer {
     align-self: flex-end;
     display: flex;
-    height: 50px;
+    height: 35px;
     width: 100%;
     align-items: center;
     justify-content: center;

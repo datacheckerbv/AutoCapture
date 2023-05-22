@@ -1,8 +1,8 @@
 var LANGUAGE = {
-    "start_prompt": "Tap to start.",
-    "flip": "Flip the document,\ntap to start.",
-    "flip_frontside": "Flip the document to the frontside,\ntap to start.",
-    "flip_backside": "Flip the document to the backside,\ntap to start.",
+    "start_prompt": "Tap to start",
+    "flip": "Flip the document.",
+    "flip_frontside": "Flip the document to the frontside.",
+    "flip_backside": "Flip the document to the backside.",
     "std_msg_0": "Fill the preview window.",
     "std_msg_1": "The 4 corners of the document \nare not detected. Use \na black background for contrast.",
     "exp_dark": "The image is too dark.\nFind an environment with more light.",

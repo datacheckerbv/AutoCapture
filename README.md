@@ -19,26 +19,53 @@ The tool performs the following checks:
 
 To run this tool, you will need initialise with the following variables.
 
-### Required
+| **ATTRIBUTE**      | **FORMAT**          | **DEFAULT VALUE**                      | **EXAMPLE**                               | **NOTES**                                                                 |
+| ------------------ | ------------------- | -------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------- |
+| `APPROVAL`         | bool                | `false`                                | `false`                                   | **optional**<br> Approval screen after capture as an extra quality check. |
+| `CONTAINER_ID`     | string              |                                        | `"AC_mount"`                              | **required**<br> _div id_ to mount tool on.                               |
+| `CROP_CARD`        | bool                | `false`                                | `false`                                   | **optional**<br> Enable cropping of card as output.                       |
+| `GLARE_LIVE_CHECK` | bool                | `true`                                 | `true`                                    | **optional**<br> Enable glare detection.                                  |
+| `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | **required**<br> Notifications in specific language.                      |
+| `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | Notifications in specific language.                                       |
+| `MODELS_PATH`      | string              | `"models/"`                            | `"models/"`                               | **optional**<br> Path referring to models location.                       |
+| `MRZ_SETTINGS`     | object              | see [MRZ_SETTINGS](#mrz_settings)      | see [MRZ_SETTINGS](#mrz_settings)         | **optional**<br> Settings of MRZ scanning.                                |
+| `MRZ`              | bool                | `false`                                | `false`                                   | **optional**<br> Enable MRZ scanning.                                     |
+| `ROOT`             | string              | `""`                                   | `"../"`                                   | **optional**<br> Root location.                                           |
+| `onComplete`       | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback function on _complete_.                         |
+| `onError`          | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback function on _error_.                            |
+| `onImage`          | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback function on _image_.                            |
+| `onUserExit`       | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **optional**<br> Callback function on _user exit_.                        |
 
-| **name**       | **type**            | **default value** | **example**                            | **description**                                                     |
-|----------------|---------------------|-------------------|----------------------------------------|---------------------------------------------------------------------|
-| `CONTAINER_ID` | string              |                   | `"AC_mount"`                           | *div id*  to mount tool on.                                         |
-| `LANGUAGE` | string              |  `"nl"`                 | `"nl"`                           | Notifications in specific language.
-| `onComplete`   | javascript function |                   | `function(data) {console.log(data)}`   | callback function on  *complete* .                                  |
-| `onError`      | javascript function |                   | `function(error) {console.log(error)}` | callback function on *error*.                                       |
+## Handling callbacks
 
-### Optional
+```javascript
+let AC = new AutoCapture();
+AC.init({
+    CONTAINER_ID: 'AC_mount',
+    LANGUAGE: 'en',
+    onComplete: function(data) {
+        console.log(data);
+        AC.stop();
+    },
+    onError: function(error) {
+        console.log(error)
+        AC.stop();
+        AC.alert(error)
+    },
+    onUserExit: function(error) {
+        console.log(error);
+        AC.stop();
+    }
+});
+```
 
-| **name**               | **type** | **default value** | **example**                             | **description**                                                                                                  |
-|------------------------|----------|-------------------|-----------------------------------------|------------------------------------------------------------------------------------------------------------------|
-| `MODELS_PATH`   | string      | `"models/"`              | `"models/"`                          | Path referring to models location.                                                                               |
-| `APPROVAL` | bool      | `false`             | `false`                                   | Approval screen after capture as an extra quality check.                                                                  |
-| `GLARE_LIVE_CHECK`           | bool    |     `true`     | `true` | Enable glare detection.                                                     |
-| `CROP_CARD`           | bool    |     `false`     | `false` | Enable cropping of card as output.                                                     |
-| `MRZ`           | bool      |        `false`           | `false`                                 | Enable MRZ scanning.                                                                                        |
-| `MRZ_RETRIES`           | int      |        `5`           | `5`                                 | Amount of retries of MRZ scanning.                                                                                            |
-| `ROOT`            | string      | `""`               | `"../"`                  | Root location.          |
+| **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                      | **EXAMPLE**                               | **NOTES**                                                                                                                                                                                           |
+| ------------- | ------------------- | -------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onComplete`  | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                                                                                                |
+| `onError`     | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback that fires when an _error_ occurs.                                                                                                                                        |
+| `onImage`     | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback that fires when frame succesfully passes quality controls. This callback can be used when you want to process or analyze live frames. (See [External-MRZ](#external-mrz)) |
+| `onUserExit`  | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **optional**<br> Callback that fires when the user exits the flow without completing it.                                                                                                            |
+
 
 ## Usage/Examples
 
@@ -51,7 +78,8 @@ AC.init({
     CONTAINER_ID: ...,
     LANGUAGE: ...,
     onComplete: ...,
-    onError: ...
+    onError: ...,
+    onUserExit: ...
 }).then(() => {
     AC.start();
 });
@@ -79,11 +107,11 @@ AC.init({
         console.log(error)
         AC.stop();
         AC.alert(error)
+    },
+    onUserExit: function(error) {
+        console.log(error);
+        AC.stop();
     }
-}).then(() => {
-    // Tap to start
-    document.addEventListener('touchstart', AC.start)
-    window.onclick = AC.start
 });
 ```
 
@@ -142,11 +170,11 @@ File present under `html/examples/index.html`
             console.log(error)
             AC.stop();
             AC.alert(error)
+        },
+        onUserExit: function(error) {
+            console.log(error);
+            AC.stop();
         }
-    }).then(() => {
-        // Tap to start
-        document.addEventListener('touchstart', AC.start)
-        window.onclick = AC.start
     });
 </script>
 
@@ -174,7 +202,10 @@ Example:
 
 ```javascript
 var LANGUAGE = {
-    "start_prompt": "Tap to start.",
+    "start_prompt": "Tap to start",
+    "flip": "Flip the document.",
+    "flip_frontside": "Flip the document to the frontside.",
+    "flip_backside": "Flip the document to the backside.",
     "std_msg_0": "Fill the preview window.",
     "std_msg_1": "The 4 corners of the document \nare not detected. Use \na black background for contrast.",
     "exp_dark": "The image is too dark.\nFind an environment with more light.",
@@ -201,6 +232,45 @@ An OCR engine is present which makes it able to do MRZ scanning. To enable MRZ s
 
 The MRZ scanning will start once all the quality checks are passed. It will than try to scan for a set amount of retries `MRZ_RETRIES: 5`(see [Configuration](#configuration)).
 To do infinite retries use `MRZ_RETRIES: -1`.
+
+### MRZ_SETTINGS
+
+| **ATTRIBUTE**     | **FORMAT** | **DEFAULT VALUE** | **EXAMPLE** | **NOTES**                                                                                                                    |
+| ----------------- | ---------- | ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `FLIP_EXCEPTION`  | \[string\] | `[]`              | `[P]`       | **optional**<br> If `FLIP` is `true` skip these misc values. Examples of possible misc values are: `[P, I, D]`.              |
+| `FLIP`            | bool       | `true`            | `true`      | **optional**<br> Prompt user to flip card.                                                                                   |
+| `MIN_VALID_SCORE` | int        | `50`              | `50`        | **optional**<br> Minimum valid score of MRZ. The valid score is a range between 0-100 indicating how valid the found MRZ is. |
+| `MRZ_RETRIES`     | int        | `5`               | `5`         | **optional**<br> Amount of retries for MRZ scanning before continuing. Use `-1` for infinite retries.                        |
+| `OCR`             | bool       | `true`            | `true`      | **optional**<br> Wether to use the internal OCR for MRZ reading. An external OCR can also be used see [MRZ](#mrz).           |
+
+Example:
+
+```javascript
+let AC = new Autocapture();
+AC.init({
+    CONTAINER_ID: 'AC_mount',
+    MRZ: true,
+    MRZ_SETTINGS: {
+        MRZ_RETRIES: -1,
+        FLIP: true,
+        FLIP_EXCEPTION: ['P'],
+        MIN_VALID_SCORE: 90,
+        OCR: true
+    },
+    onComplete: function (data) {
+        console.log(data)
+        AC.stop();
+    },
+    onError: function(error) {
+        console.log(error)
+        AC.stop();
+        AC.alert(error)
+    },
+    onUserExit: function () {
+        window.history.back()
+    }
+})
+```
 
 Example output:
 
@@ -243,6 +313,22 @@ Example output:
     "names": "WILLEKE LISELOTTE",
     "surname": "DE BRUIJN"
 }
+```
+
+### External MRZ
+
+MRZ can also externally be retrieved and sent to the SDK. With the `onImage` callback, an external process can be started with the current frames. If such a process succesfully retrieves the MRZ it can than be sent to the SDK with the `parse_mrz` function. An example of this function below:
+
+```javascript
+let AC = new Autocapture();
+AC.init({
+    ...,
+    onImage: function (data) {
+        console.log(data)
+        let MRZ_text = EXTERNAL_OCR_FUNCTION(data) // "P<NLDDE<BRUIJN<<WILLEKE<LISELOTTE<<<<<<<<<<<\nSPECI20142NLD6503101F2403096999999990<<<<<84"
+        AC.parse_mrz(text);
+    },
+})
 ```
 
 ## Output
