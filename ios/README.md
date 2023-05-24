@@ -1,61 +1,119 @@
-# AutoCapture - iOS integration
+# iOS Integration Guide for AutoCapture Web App
 
-This guide provides step-by-step instructions on how to integrate the AutoCapture web application into an iOS app using WKWebView.
+This guide will walk you through the process of integrating a JavaScript web app into an iOS app using the `AutoCaptureViewController` as an example. By following these steps, you will be able to embed your web app within an iOS app and leverage its functionality seamlessly.
 
 Please note that AutoCapture is a web-based tool written in JavaScript. Before proceeding with the iOS integration, make sure to familiarize yourself with the JavaScript documentation to understand how to configure the tool. The following instructions will guide you through running the JavaScript code within a Swift environment.
 
-## Installation
+## Prerequisites
 
-1. Clone repo
+Before getting started, make sure you have the following:
 
-```bash
-git clone git@github.com:datacheckerbv/AutoCapture.git
-```
+- Xcode installed on your development machine.
+- The AutoCapture web app that you want to integrate into your iOS app.
 
-2. Move `ios/index.html` to `html/index.html`
+## Step 1: Set up the iOS Project
 
-```bash
-cd AutoCapture
-mv ios/index.html html/index.html
-```
+1. Launch Xcode and create a new iOS project or open an existing project where you want to integrate the web app.
 
-3. Import AutoCapture in your Xcode project.
+2. Add the necessary JavaScript files and other web app resources to your Xcode project. Make sure to maintain the directory structure of your web app.
 
-4. Create a AutoCapture View Controller
+3. Create a new Swift file (or use an existing one) and name it `AutoCaptureViewController.swift`. Copy the provided code for the `AutoCaptureViewController` into this file.
 
-## Usage
+4. Import the required frameworks at the top of the `AutoCaptureViewController.swift` file, including `UIKit`, `WebKit`, and `Foundation`.
 
-Inside the `AutoCaptureViewController`, you can start the script using webView.evaluateJavaScript(script, completionHandler: nil).
+5. Make sure you have the required dependencies imported. Check if the following dependencies are added to your project's dependencies:
 
-Here's an example of how to integrate AutoCapture into your iOS app:
+   - UIKit
+   - WebKit
 
-```
-let script = """
-            let AC = new AutoCapture();
-            AC.init({
+## Step 2: Set the HTML File URL
+
+1. Open the `AutoCaptureViewController.swift` file.
+
+2. Locate the `htmlFileURL` property declaration inside the `AutoCaptureViewController` class.
+
+3. Set the `htmlFileURL` to the location of the imported AutoCapture web app repo within your Xcode project. You can use the `Bundle.main.url` method to get the appropriate URL. For example:
+
+   ```swift
+   htmlFileURL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "path/to/web/app")!
+   ```
+
+   Replace `"path/to/web/app"` with the actual path to the imported AutoCapture web app repo within your Xcode project.
+
+## Step 3: Storyboard Setup (Optional)
+
+If you prefer to use a storyboard for designing your UI, you can follow these steps:
+
+1. Open the Main.storyboard file (or create a new one).
+
+2. Drag and drop a `WKWebView` onto your view controller's scene.
+
+3. Connect the `webView` outlet in the `AutoCaptureViewController` to the `WKWebView` you added in the storyboard.
+
+4. Set up the desired constraints for the `WKWebView` to define its position and size on the screen.
+
+## Step 4: Configuring the WebView
+
+1. Inside the `viewDidLoad()` method of the `AutoCaptureViewController`, configure the `WKWebView` by creating a `WKWebViewConfiguration` object.
+
+2. Customize the `WKWebViewConfiguration` object as needed. For example, you need to enable inline media playback by setting `allowsInlineMediaPlayback` to `true`.
+
+3. Configure the `WKUserContentController` by adding message handlers and user scripts. This allows communication between the web app and the iOS app.
+
+4. Set the `navigationDelegate` of the `webView` to the current view controller.
+
+## Step 5: Loading the Web App
+
+1. Call the `loadFileURL(_:allowingReadAccessTo:)` method on the `webView` instance to load the web app's HTML file. Pass the appropriate file URL and allow read access to the necessary directories.
+
+2. Implement the delegate method `webView(_:didFinish:)` from the `WKNavigationDelegate` protocol. This method will be called when the web view finishes loading the web app.
+
+3. Inside the `webView(_:didFinish:)` method, evaluate any necessary JavaScript code using `evaluateJavaScript(_:completionHandler:)`. This allows you to interact with the web app from your iOS code.
+
+```swift
+extension AutoCaptureViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let script = """
+            window.AC = new Autocapture();
+            window.AC.init({
                 CONTAINER_ID: 'AC_mount',
                 LANGUAGE: 'en',
+                MRZ: false,
+                CHECK_TOTAL:5,
+                CROP_CARD: true,
                 MODELS_PATH:"\(modelURL)",
-                MRZ: true,
-                MRZ_RETRIES: 5,
-                onComplete: function(data) {
+                onComplete: function (data) {
                     window.webkit.messageHandlers.output.postMessage(data);
-                    AC.stop();
+                    window.AC.stop()
                 },
                 onError: function(error) {
-                    AC.stop();
-                    AC.alert(error);
+                    console.log(error)
+                    window.AC.stop();
+                    window.AC.alert(error)
                 }
-            }).then(() => {
-                // Tap to start
-                document.addEventListener('touchstart', AC.start)
-                window.onclick = AC.start
-            });
-"""
-
-webView.evaluateJavaScript(script, completionHandler: nil)
+            })
+        """
+        
+        webView.evaluateJavaScript(script, completionHandler: nil)
+    }
 ```
 
-Make sure to replace `modelURL` with the actual URL of the models needed for AutoCapture. Also replace `token` with a valid token.
+## Step 6: Handling Communication with the Web App
 
-These steps will enable you to integrate the AutoCapture web application seamlessly into your iOS app using the WKWebView component.
+1. Implement the delegate method `userContentController(_:didReceive:)` from the `WKScriptMessageHandler` protocol. This method is responsible for handling messages sent from the web app.
+
+2. Extract the message body as a dictionary and process the data as needed. You can pass data between the web app and the iOS app using this message handler.
+
+3. Customize the logic inside `userContentController(_:didReceive:)` based on your specific requirements.
+
+```swift
+extension AutoCaptureViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let dict = message.body as? [String: AnyObject] else {
+            return
+        }
+        print(dict)
+        dismiss(animated: true, completion: nil)
+    }
+}
+```
