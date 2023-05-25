@@ -274,7 +274,8 @@ AC.init({
 Example output:
 
 ```json
-{
+{   
+    "angle": "...",
     "type": "PASSPORT",
     "subtype": "<",
     "country": "NLD",
@@ -345,7 +346,9 @@ With MRZ:
 ```json
 {
     "image": "...base64_img",
+    "meta": [{"angle": "..."}],
     "mrz": {
+        "angle": "...",
         "type": "...",
         "subtype": "...",
         "country": "...",
@@ -391,7 +394,9 @@ Example:
 ```json
 {
     "image": "iVBORw0KGgoAAAANSUhEUgAAAysAAAS...",
+    "meta": [{"angle": 0}],
     "mrz": {
+        "angle": "...",
         "type": "PASSPORT",
         "subtype": "<",
         "country": "NLD",
