@@ -87,24 +87,54 @@ button[disabled] {
 
 
 #alertContainer {
+    align-items: center;
     display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
     flex-direction: column;
+    line-height: 1em;
+    /* margin-bottom: 50px; */
 }
-
 
 #alertBox {
     z-index: inherit;
-    /* width: 80%; */
-    /* height: 50px; */
     justify-content: center;
     display: none;
     text-align: center;
     align-items: center;
-    box-shadow: 2px 2px 4px #000000;
     border-radius: 0.25em;
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
+    padding: 6px;
+    font-size: 26px;
+    line-height: 1em;
+    margin: 10px;
+    max-width: 90%;
+}
+
+#taskContainer {
+    align-items: center;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+}
+
+#taskBox {
+    z-index: inherit;
+    justify-content: center;
+    display: none;
+    text-align: center;
+    align-items: center;
+    border-radius: 0.25em;
+    color: white;
+    /* background-color: rgba(0, 0, 0, 0.4); */
     padding: 0.05em 0.3em 0.05em 0.3em;
+    font-size: 26px;
+    line-height: 1em;
+    margin: 0.5em 0;
+    height: 10%;
+    max-width: 80%;
 }
 
 #pbar_container {
@@ -133,7 +163,7 @@ button[disabled] {
 
 #roi_border {
     fill: none;
-    stroke-width: 5;
+    stroke-width: 10;
     stroke: white;
 }
 
@@ -415,7 +445,7 @@ html {
   #capture-button-container {
     display: none;
     position: absolute;
-    bottom: 50px;
+    bottom: 35px;
     width: 100%;
   }
 
@@ -426,14 +456,55 @@ html {
   }
 
 
-
-
   #start-button-container {
     display: none;
   }
 
   #start-button {
-    background-color: #1d3461
+    align-items: center;
+    font-size: 26px;
+    width: 75%;
+    text-align: center;
+    position: absolute;
+    color: white;
+    justify-content: center;
+    top: 0;
+    display: flex;
+    height: 15%;
+  }
+
+  #explain-container {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  #explain-div {
+    width: 90%;
+    /* height: 500px; */
+    background-color: white;
+    border-radius:  1em;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  #explain-div img {
+    position: static;
+    width: 90%;
+    object-fit: contain;
+    /* margin: 10px; */
+  }
+
+  #explain-div p {
+    font-size: 20px;
+    line-height: 1em;
+  }
+
+  #explain-div button {
+    margin: 20px 0px;
+    width: 90%;
+    padding: 10px;
+    border-radius:  1em;
   }
 
 @keyframes checkmark {

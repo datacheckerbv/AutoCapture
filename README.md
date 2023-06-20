@@ -24,6 +24,7 @@ To run this tool, you will need initialise with the following variables.
 | `APPROVAL`         | bool                | `false`                                | `false`                                   | **optional**<br> Approval screen after capture as an extra quality check. |
 | `CONTAINER_ID`     | string              |                                        | `"AC_mount"`                              | **required**<br> _div id_ to mount tool on.                               |
 | `CROP_CARD`        | bool                | `false`                                | `false`                                   | **optional**<br> Enable cropping of card as output.                       |
+| `DETECT_PAPER`     | bool                | `false`                                | `false`                                   | **optional**<br> Enable paper document. detection.                        |
 | `GLARE_LIVE_CHECK` | bool                | `true`                                 | `true`                                    | **optional**<br> Enable glare detection.                                  |
 | `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | **required**<br> Notifications in specific language.                      |
 | `MODELS_PATH`      | string              | `"models/"`                            | `"models/"`                               | **optional**<br> Path referring to models location.                       |
@@ -436,3 +437,10 @@ Example:
     }
 }
 ```
+
+## CHANGES v1.1.0
+
+- Added paper document detection. (see [Configuration](#configuration))
+- New UI.
+- Decreased size ONNX engine.
+- Glare classification instead of segmentation.
