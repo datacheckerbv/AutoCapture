@@ -528,3 +528,4 @@ Please note: The migration from V1 to V2 is a breaking change. The outputs are c
 - Portrait mode requirement, landscape will throw an alert.
 - New Tap-to-start screen.
 - New flip animations.
+- Added Android integration documentation at `android/`.
