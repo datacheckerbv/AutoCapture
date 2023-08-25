@@ -19,21 +19,24 @@ The tool performs the following checks:
 
 To run this tool, you will need initialise with the following variables.
 
-| **ATTRIBUTE**      | **FORMAT**          | **DEFAULT VALUE**                      | **EXAMPLE**                               | **NOTES**                                                                 |
-| ------------------ | ------------------- | -------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------- |
-| `APPROVAL`         | bool                | `false`                                | `false`                                   | **optional**<br> Approval screen after capture as an extra quality check. |
-| `CONTAINER_ID`     | string              |                                        | `"AC_mount"`                              | **required**<br> _div id_ to mount tool on.                               |
-| `CROP_CARD`        | bool                | `false`                                | `false`                                   | **optional**<br> Enable cropping of card as output.                       |
-| `GLARE_LIVE_CHECK` | bool                | `true`                                 | `true`                                    | **optional**<br> Enable glare detection.                                  |
-| `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | **required**<br> Notifications in specific language.                      |
-| `MODELS_PATH`      | string              | `"models/"`                            | `"models/"`                               | **optional**<br> Path referring to models location.                       |
-| `MRZ_SETTINGS`     | object              | see [MRZ_SETTINGS](#mrz_settings)      | see [MRZ_SETTINGS](#mrz_settings)         | **optional**<br> Settings of MRZ scanning.                                |
-| `MRZ`              | bool                | `false`                                | `false`                                   | **optional**<br> Enable MRZ scanning.                                     |
-| `ROOT`             | string              | `""`                                   | `"../"`                                   | **optional**<br> Root location.                                           |
-| `onComplete`       | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback function on _complete_.                         |
-| `onError`          | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback function on _error_.                            |
-| `onImage`          | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback function on _image_.                            |
-| `onUserExit`       | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **optional**<br> Callback function on _user exit_.                        |
+| **ATTRIBUTE**      | **FORMAT**          | **DEFAULT VALUE**                      | **EXAMPLE**                               | **NOTES**                                                                                                       |
+| ------------------ | ------------------- | -------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `APPROVAL`         | bool                | `false`                                | `false`                                   | **optional**<br> Approval screen after capture as an extra quality check.                                       |
+| `CONTAINER_ID`     | string              |                                        | `"AC_mount"`                              | **required**<br> _div id_ to mount tool on.                                                                     |
+| `CROP_CARD`        | bool                | `false`                                | `false`                                   | **optional**<br> Enable cropping of card as output.                                                             |
+| `CROP_FACE`        | bool                | `true`                                 | `true`                                    | **optional**<br> Enable cropping of face as output. This will be set to `false` when `DETECT_PAPER` is enabled. |
+| `DETECT_PAPER`     | bool                | `false`                                | `false`                                   | **optional**<br> Enable paper document. detection.                                                              |
+| `GLARE_LIVE_CHECK` | bool                | `true`                                 | `true`                                    | **optional**<br> Enable glare detection.                                                                        |
+| `LANGUAGE`         | string              | `"nl"`                                 | `"nl"`                                    | **required**<br> Notifications in specific language.                                                            |
+| `MODELS_PATH`      | string              | `"models/"`                            | `"models/"`                               | **optional**<br> Path referring to models location.                                                             |
+| `MRZ_SETTINGS`     | object              | see [MRZ_SETTINGS](#mrz_settings)      | see [MRZ_SETTINGS](#mrz_settings)         | **optional**<br> Settings of MRZ scanning.                                                                      |
+| `MRZ`              | bool                | `false`                                | `false`                                   | **optional**<br> Enable MRZ scanning.                                                                           |
+| `ROOT`             | string              | `""`                                   | `"../"`                                   | **optional**<br> Root location.                                                                                 |
+| `TOKEN`            | string              |                                        | `"<SDK TOKEN>"`                           | **required**<br> Datachecker SDK token.                                                                         |
+| `onComplete`       | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback function on _complete_.                                                               |
+| `onError`          | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback function on _error_.                                                                  |
+| `onImage`          | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback function on _image_.                                                                  |
+| `onUserExit`       | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **optional**<br> Callback function on _user exit_.                                                              |
 
 ## Handling callbacks
 
@@ -64,7 +67,6 @@ AC.init({
 | `onError`     | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback that fires when an _error_ occurs.                                                                                                                                        |
 | `onImage`     | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback that fires when frame succesfully passes quality controls. This callback can be used when you want to process or analyze live frames. (See [External-MRZ](#external-mrz)) |
 | `onUserExit`  | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **optional**<br> Callback that fires when the user exits the flow without completing it.                                                                                                            |
-
 
 ## Usage/Examples
 
@@ -225,6 +227,26 @@ var LANGUAGE = {
 The tool uses a collection of neural networks. Make sure that you host the full directory so the models can be accessed. The models path can be configured. (see [Configuration](#configuration))
 The models are located under `models/`.
 
+## Token
+
+In order to use the SDK in production a *token* is required. This token is a `base64` string. The token can be generated by calling the [Datachecker Token API](https://developer.datachecker.nl).
+
+## Face
+
+There is a face detector within the SDK. This detector will try to find the portrait picture on the document. If it is found, this face will be present in the output. Else, the output will not have any mention of `face`. When more faces are found only one face is being returned. The face with the highest score will be returned.
+
+Example:
+
+```json
+{
+    "image": ["...base64_img"],
+    "face": {
+        "score": 0.9,
+        "data": "...base64_img"
+    },
+}
+```
+
 ## MRZ
 
 An OCR engine is present which makes it able to do MRZ scanning. To enable MRZ scanning use `MRZ: true`(see [Configuration](#configuration)). The tool is able to scan and parse TD1, TD2, TD3 and Dutch eDL.
@@ -337,7 +359,23 @@ The SDK will output in the following structure:
 
 ```json
 {
-    "image": "...base64_img"
+    "image": ["...base64_img"],
+    "face": {
+        "score": "...",
+        "data": "...base64_img"
+    },
+    "meta": [
+        {
+            "angle": "...",
+            "coordinates": [
+                ["...", "..."],
+                ["...", "..."],
+                ["...", "..."],
+                ["...", "..."]
+            ]
+        }
+    ],
+    "token": "sdk_token"
 }
 ```
 
@@ -345,8 +383,22 @@ With MRZ:
 
 ```json
 {
-    "image": "...base64_img",
-    "meta": [{"angle": "..."}],
+    "image": ["...base64_img"],
+    "face": {
+        "score": "...",
+        "data": "...base64_img"
+    },
+    "meta": [
+        {
+            "angle": "...",
+            "coordinates": [
+                ["...", "..."],
+                ["...", "..."],
+                ["...", "..."],
+                ["...", "..."]
+            ]
+        }
+    ],
     "mrz": {
         "angle": "...",
         "type": "...",
@@ -385,7 +437,8 @@ With MRZ:
         "misc": "...",
         "names": "...",
         "surname": "..."
-    }
+    },
+    "token": "sdk_token"
 }
 ```
 
@@ -393,8 +446,22 @@ Example:
 
 ```json
 {
-    "image": "iVBORw0KGgoAAAANSUhEUgAAAysAAAS...",
-    "meta": [{"angle": 0}],
+    "image": ["iVBORw0KGgoAAAANSUhEUgAAAysAAAS..."],
+    "face": {
+        "score": 0.9,
+        "data": "iVBORw0KGgoAAAANSUhEUgAAAysAAAS..."
+    },
+    "meta": [
+        {
+            "angle": 0,
+            "coordinates": [
+                [0, 0],
+                [0, 100],
+                [150, 100],
+                [150, 0]
+            ]
+        }
+    ],
     "mrz": {
         "angle": "...",
         "type": "PASSPORT",
@@ -433,6 +500,22 @@ Example:
         "misc": "P",
         "names": "WILLEKE LISELOTTE",
         "surname": "DE BRUIJN"
-    }
+    },
+    "token": "sdk_token"
 }
 ```
+
+## CHANGES v1.1.0
+
+- Added paper document detection. (see [Configuration](#configuration))
+- New UI.
+- Decreased size ONNX engine.
+- Glare classification instead of segmentation.
+
+## CHANGES v2.0.0
+
+- Added Token. (see [Token](#token), [Configuration](#configuration))
+- Added cropping of face. (see [Configuration](#configuration), [Output](#output))
+- Portrait mode requirement, landscape will throw an alert.
+- New Tap-to-start screen.
+- New flip animations.
