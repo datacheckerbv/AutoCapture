@@ -516,10 +516,9 @@ Example:
 
 **BREAKING CHANGE!**
 
-
 Please note: The migration from V1 to V2 is a breaking change. The outputs are changed and the SDK is locked with a token.
 
-- Added Token. (see [Token](#token), [Configuration](#configuration))
+- Added Token with validation. Application can only be started with a valid token. (see [Token](#token), [Configuration](#configuration))
 - Added cropping of face. (see [Configuration](#configuration), [Output](#output))
 - Portrait mode requirement, landscape will throw an alert.
 - New Tap-to-start screen.
