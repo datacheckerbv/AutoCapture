@@ -514,7 +514,9 @@ Example:
 
 ## CHANGES v2.0.0
 
-*BREAKING CHANGE*
+**BREAKING CHANGE!**
+
+
 Please note: The migration from V1 to V2 is a breaking change. The outputs are changed and the SDK is locked with a token.
 
 - Added Token. (see [Token](#token), [Configuration](#configuration))
