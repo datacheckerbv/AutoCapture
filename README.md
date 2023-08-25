@@ -32,7 +32,7 @@ To run this tool, you will need initialise with the following variables.
 | `MRZ_SETTINGS`     | object              | see [MRZ_SETTINGS](#mrz_settings)      | see [MRZ_SETTINGS](#mrz_settings)         | **optional**<br> Settings of MRZ scanning.                                                                      |
 | `MRZ`              | bool                | `false`                                | `false`                                   | **optional**<br> Enable MRZ scanning.                                                                           |
 | `ROOT`             | string              | `""`                                   | `"../"`                                   | **optional**<br> Root location.                                                                                 |
-| `TOKEN`            | string              |                                        | `"<SDK TOKEN>"`                           | **required**<br> Datachecker SDK token.                                                                         |
+| `TOKEN`            | string              |                                        | see [Token](#token)                       | **required**<br> Datachecker SDK token.                                                                         |
 | `onComplete`       | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback function on _complete_.                                                               |
 | `onError`          | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **optional**<br> Callback function on _error_.                                                                  |
 | `onImage`          | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback function on _image_.                                                                  |
@@ -513,6 +513,9 @@ Example:
 - Glare classification instead of segmentation.
 
 ## CHANGES v2.0.0
+
+*BREAKING CHANGE*
+Please note: The migration from V1 to V2 is a breaking change. The outputs are changed and the SDK is locked with a token.
 
 - Added Token. (see [Token](#token), [Configuration](#configuration))
 - Added cropping of face. (see [Configuration](#configuration), [Output](#output))
