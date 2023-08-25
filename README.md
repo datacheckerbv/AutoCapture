@@ -45,6 +45,7 @@ let AC = new AutoCapture();
 AC.init({
     CONTAINER_ID: 'AC_mount',
     LANGUAGE: 'en',
+    TOKEN: "<SDK_TOKEN>",
     onComplete: function(data) {
         console.log(data);
         AC.stop();
@@ -78,6 +79,7 @@ let AC = new AutoCapture();
 AC.init({
     CONTAINER_ID: ...,
     LANGUAGE: ...,
+    TOKEN: ...,
     onComplete: ...,
     onError: ...,
     onUserExit: ...
@@ -100,6 +102,7 @@ let AC = new AutoCapture();
 AC.init({
     CONTAINER_ID: 'AC_mount',
     LANGUAGE: 'nl',
+    TOKEN: "<SDK_TOKEN>",
     onComplete: function(data) {
         console.log(data);
         AC.stop();
@@ -164,6 +167,7 @@ File present under `html/examples/index.html`
         CONTAINER_ID: 'AC_mount',
         LANGUAGE: 'nl',
         ROOT: "../",
+        TOKEN: "<SDK_TOKEN>",
         onComplete: function (data) {
             console.log(data)
         },
@@ -278,6 +282,7 @@ AC.init({
         MIN_VALID_SCORE: 90,
         OCR: true
     },
+    TOKEN: "<SDK_TOKEN>",
     onComplete: function (data) {
         console.log(data)
         AC.stop();
