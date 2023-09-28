@@ -26,8 +26,10 @@
         },
         onError: function(error) {
             console.log(error)
-            AC.stop();
-            AC.alert(error)
+        },
+        onUserExit: function(error) {
+            console.log(error)
+            window.history.back()
         }
     }).then(() => {
         // Tap to start
