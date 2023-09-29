@@ -10,7 +10,7 @@ Before you begin, ensure you have the following:
 
 - Android Studio installed on your development machine.
 - The AutoCapture repository.
-- The [HybridOCR Android SDK](https://github.com/datacheckerbv/HybridOCR).
+- The [HybridOCR Android SDK](https://github.com/omkardatachecker/HybridOCR).
 
 ## Step 1: Setting up the Android Project
 
@@ -156,7 +156,7 @@ private void startAutoCaptureConfig(WebView view) {
 
 AutoCapture's internal OCR consists of a Tesseract JS library. Unfortunately this library is big and causes memory issues when creating an android application. A solution to this is using Android native OCR together with AutoCapture. The SDK will find the document, and in a hybrid way, the Native OCR will find the MRZ.
 
-Find the HybridOCR repo here: [HybridOCR Android SDK](https://github.com/datacheckerbv/HybridOCR)
+Find the HybridOCR repo here: [HybridOCR Android SDK](https://github.com/omkardatachecker/HybridOCR)
 
 ### 2.4 **Creating AutoCaptureWebViewClient**
 
