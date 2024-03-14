@@ -1,10 +1,5 @@
 # *CHANGELOG*
 
-## *CHANGES* v0.0.32
-- This is a test
-- For selecting the correct part
-- Of this changelog
-
 ## *CHANGES* v3.0.0
 
 - Increased max resolution to 1080x1980 for sharper output images.
