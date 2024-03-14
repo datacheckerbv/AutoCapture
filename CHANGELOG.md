@@ -1,6 +1,6 @@
 # *CHANGELOG*
 
-## *CHANGES* v0.0.31
+## *CHANGES* v0.0.32
 - This is a test
 - For selecting the correct part
 - Of this changelog
