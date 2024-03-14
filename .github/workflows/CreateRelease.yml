@@ -1,0 +1,28 @@
+name: Create release
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create release tag
+        id: create-release-tag
+        run: echo "tag_name=$(cat ./package.json | jq '.version' | tr -d '"')" >> $GITHUB_OUTPUT
+
+      - name: Split changelog by version
+        run: awk '/^##/{ close(out); out=$3".md" } out !=""{print > out}' CHANGELOG.md
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          body_path: ${{ steps.create-release-tag.outputs.tag_name}}.md
+          draft: false
+          tag_name: ${{ steps.create-release-tag.outputs.tag_name }}
