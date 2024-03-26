@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.0.1
+
+- Add V3 migration guide
+
 ## *CHANGES* v3.0.0
 
 - Increased max resolution to 1080x1980 for sharper output images.
