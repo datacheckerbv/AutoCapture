@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.0.2
+
+- Bugfix: Personal number was not returned in NLD / BEL ID docs.
+
 ## *CHANGES* v3.0.1
 
 - Add V3 migration guide
