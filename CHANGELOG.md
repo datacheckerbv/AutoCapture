@@ -1,5 +1,17 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.0
+
+- Decreased size of `autocapture.obf.js` by 8.38 MiB, resulting in faster loading time.
+- New document detector, documents without MRZ can now be captured before their other side with MRZ.
+- Improved UI/UX.
+- Changed notifications. (see [Languages](README.md#languages))
+- Capture button configuration. (see [Configuration](README.md#configuration))
+- Camera selection is now possible. This can be used as a fallback when the automatic back camera detection fails.
+- Clean-up codebase.
+
+- Bugfix: No Camera access native iOS now throws the expected error.
+
 ## *CHANGES* v3.0.2
 
 - Bugfix: Personal number was not returned in NLD / BEL ID docs.
