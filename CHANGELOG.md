@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.1
+
+- Bugfix: Fixed an issue where conflicts occurred when loading different ONNX engines in the same environment, such as when different SDKs are used simultaneously.
+
 ## *CHANGES* v3.1.0
 
 - Decreased size of `autocapture.obf.js` by 8.38 MiB, resulting in faster loading time.
