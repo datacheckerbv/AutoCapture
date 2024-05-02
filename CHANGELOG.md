@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.2
+
+- Bugfix: Resolved an issue where AutoCapture (version 3.1.0 and above) failed to load on iOS devices.
+
 ## *CHANGES* v3.1.1
 
 - Bugfix: Fixed an issue where conflicts occurred when loading different ONNX engines in the same environment, such as when different SDKs are used simultaneously.
