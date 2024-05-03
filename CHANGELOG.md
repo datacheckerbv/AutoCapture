@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.3
+
+- Bugfix: The new document detector introduced in version `v3.1.0` was not properly utilized.
+
 ## *CHANGES* v3.1.2
 
 - Bugfix: Resolved an issue where AutoCapture (version 3.1.0 and above) failed to load on iOS devices.
