@@ -1,5 +1,15 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.4
+
+- **Optimized `opencv.js` Size**: Reduced the size of `opencv.js`, resulting in faster loading times.
+- **Added SIMD Support**: `opencv.js` now supports SIMD (Single Instruction, Multiple Data) for enhanced performance.
+- **Efficiency Improvements**: Made minor efficiency fixes, leading to a smoother process.
+- **Enhanced Camera Filtering**: Improved camera filtering based on `facingMode` and `focusMode` capabilities.
+- **Updated Compatibility Requirements**: The SDK requires at least ECMAScript 12 (ES12). Please refer to the [Compatibility](README.md#compatibility) section for more details.
+- **Bug Fix**: Resolved issues related to adaptive exposure.
+- **Bug Fix**: Resolved focus issues with incorrect camera selection by refining focus mode criteria.
+
 ## *CHANGES* v3.1.3
 
 - Bugfix: The new document detector introduced in version `v3.1.0` was not properly utilized.
