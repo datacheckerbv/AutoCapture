@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v3.1.5
+
+- **Enhanced MRZ detection**: Improved capability to detect the presence of MRZ on document.
+
 ## *CHANGES* v3.1.4
 
 - **Optimized `opencv.js` Size**: Reduced the size of `opencv.js`, resulting in faster loading times.
