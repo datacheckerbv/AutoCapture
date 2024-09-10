@@ -118,13 +118,16 @@ private void startAutoCaptureConfig(WebView view) {
                 "            LANGUAGE: 'en',\n" +
                 "            MRZ: true,\n" +
                 "            CHECK_TOTAL:5,\n" +
-                "            CROP_CARD: true,\n" +
                 "            MRZ_SETTINGS: {\n" +
                 "                MRZ_RETRIES: 50,\n" +
-                "                FLIP: true,\n" +
-                "                FLIP_EXCEPTION: ['P'],\n" +
                 "                MIN_VALID_SCORE: 50,\n" +
-                "                OCR: false\n" +
+                "            },\n" +
+                "            ALLOWED_DOCUMENTS: {\n" +
+                "                ID: ['FRONT', 'BACK'],\n" +
+                "                PASSPORT: ['FRONT', 'BACK'],\n" +
+                "                DUTCH_PASSPORT: ['FRONT', 'BACK'],\n" +
+                "                RESIDENCE_PERMIT: ['FRONT', 'BACK'],\n" +
+                "                DRIVING_LICENSE: ['FRONT', 'BACK'],\n" +
                 "            },\n" +
                 "            ASSETS_MODE: 'LOCAL',\n" + // Mode set to local
                 "            ASSETS_FOLDER:\"" + assetsUrl + "\",\n" + // Dynamically set to assets URL

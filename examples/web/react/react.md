@@ -87,10 +87,17 @@ declare module '@datachecker/autocapture' {
   };
 
   type MRZSettings = {
-    FLIP: boolean;
-    FLIP_EXCEPTION?: Array<'P' | 'I' | 'D'>;
-    FLIP_INCLUDE?: Array<{ misc: 'P' | 'I' | 'D'; country: string; nationality: string }>;
+    MRZ_RETRIES: number;
+    MIN_VALID_SCORE: number;
   };
+
+type AllowedDocuments = {
+    ID: Array<'FRONT' | 'BACK'>;
+    PASSPORT: Array<'FRONT' | 'BACK'>;
+    DUTCH_PASSPORT?: undefined;
+    RESIDENCE_PERMIT: Array<'FRONT' | 'BACK'>;
+    DRIVING_LICENSE: Array<'FRONT' | 'BACK'>;
+};
 
   interface AutoCaptureConfig {
     CONTAINER_ID: string;

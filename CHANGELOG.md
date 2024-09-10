@@ -1,5 +1,21 @@
 # *CHANGELOG*
 
+## *CHANGES* v4.0.0
+
+This is a major update. If you are currently using version 3, there is a [migration guide](docs/migration_guide_v4.md) available to help you transition to version 4.
+
+### Breaking Changes
+
+- **Removal Crop card**: Removed the capability of cropping the card in the output image (`CROP_CARD`). The output image will be the roi area oriented to the card.
+- **Internal OCR Removed**: The internal OCR has been removed due to performance concerns. However, hybrid OCR functionality remains available. Because of this, the following `MRZ_SETTINGS` are deprecated: [`FLIP`, `FLIP_EXCEPTION`, `FLIP_INCLUDE`, `OCR`, `RTW`]. As be seen, the `FLIP` configurations now moved from `MRZ_SETTINGS` to `ALLOWED_DOCUMENTS`.
+- **Removal of `CAPTURE_BTN_AFTER`**: The `CAPTURE_BTN_AFTER` setting has been removed.
+- **Removal of `GLARE_LIVE_CHECK`**: The `GLARE_LIVE_CHECK` setting has been removed. A glare check will always be performed.
+
+### Improvements
+
+- **New detection model**: Improved the detection model, it now will perform card detection and quality control.
+- **New allowed documents setting**: You can now use the `ALLOWED_DOCUMENTS` setting to enable or disable flipping of certain documents. Please refer to the [ALLOWED DOCUMENTS](README.md#allowed-documents) section for more details.
+
 ## *CHANGES* v3.1.5
 
 - **Enhanced MRZ detection**: Improved capability to detect the presence of MRZ on document.

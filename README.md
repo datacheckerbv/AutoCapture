@@ -86,28 +86,26 @@ fetch(<BASE_ENDPOINT>+"/sdk/token?customer_reference=<CUSTOMER>&services=AUTO_CA
 
 To run this tool, you will need initialise with the following variables.
 
-| **ATTRIBUTE**       | **FORMAT**              | **DEFAULT VALUE**                                   | **EXAMPLE**                                         | **NOTES**                                                                                                                                                                                                     |
-| ------------------- | ----------------------- | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ALWAYS_FLIP`       | bool                    | `false`                                             | `true`                                              | **optional**<br> Always perform flipping even when `MRZ` scanning is `false`.                                                                                                                                 |
-| `APPROVAL`          | bool                    | `false`                                             | `false`                                             | **optional**<br> Approval screen after capture as an extra quality check.                                                                                                                                     |
-| `ASSETS_FOLDER`     | string                  | `""`                                                | `"../"`                                             | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                  |
-| `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                           |
-| `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                         | `"#1d3461"`                                         | **optional**<br> Specifies the background color using a hex color code.                                                                                                                                       |
-| `CAPTURE_BTN_AFTER` | int                     | `5000`                                              | `0`                                                 | **optional**<br> Configures a delay for the capture button's appearance in milliseconds. Setting this parameter to `0` disables the button. For active use, specify the delay before the button is displayed. |
-| `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                            |
-| `CROP_CARD`         | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable cropping of card as output.                                                                                                                                                           |
-| `CROP_FACE`         | bool                    | `true`                                              | `true`                                              | **optional**<br> Enable cropping of face as output.                                                                                                                                                           |
-| `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                                                                     |
-| `GLARE_LIVE_CHECK`  | bool                    | `true`                                              | `true`                                              | **optional**<br> Enable glare detection.                                                                                                                                                                      |
-| `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                                                          |
-| `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                                                                    |
-| `MRZ`               | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable MRZ scanning.                                                                                                                                                                         |
-| `onComplete`        | javascript function     |                                                     | `function(data) {console.log(data)}`                | **required**<br> Callback function on _complete_.                                                                                                                                                             |
-| `onError`           | javascript function     | `function(error) {console.log(error)}`              | `function(error) {console.log(error)}`              | **required**<br> Callback function on _error_.                                                                                                                                                                |
-| `onImage`           | javascript function     | `function(data) {console.log(data)}`                | `function(data) {console.log(data)}`                | **optional**<br> Callback function on _image_.                                                                                                                                                                |
-| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`              | `function(error) {window.history.back()}`           | **required**<br> Callback function on _user exit_.                                                                                                                                                            |
-| `ROI_MODE`          | string                  | `"landscape-landscape"`                             | `portrait-landscape`                                | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                   |
-| `TOKEN`             | string                  |                                                     | see [SDK Token](#sdk-token)                         | **required**<br> Datachecker SDK token.                                                                                                                                                                       |
+| **ATTRIBUTE**       | **FORMAT**              | **DEFAULT VALUE**                                   | **EXAMPLE**                                         | **NOTES**                                                                                                                                                           |
+| ------------------- | ----------------------- | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ALLOWED_DOCUMENTS` | object                  | see [ALLOWED DOCUMENTS](#allowed-documents)         | see [ALLOWED DOCUMENTS](#allowed-documents)         | **optional**<br> Enable or disable flipping of certain documents.                                                                                                   |
+| `ALWAYS_FLIP`       | bool                    | `false`                                             | `true`                                              | **optional**<br> Always perform flipping even when `MRZ` scanning is `false`.                                                                                       |
+| `APPROVAL`          | bool                    | `false`                                             | `false`                                             | **optional**<br> Approval screen after capture as an extra quality check.                                                                                           |
+| `ASSETS_FOLDER`     | string                  | `""`                                                | `"../"`                                             | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                        |
+| `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration)) |
+| `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                         | `"#1d3461"`                                         | **optional**<br> Specifies the background color using a hex color code.                                                                                             |
+| `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                  |
+| `CROP_FACE`         | bool                    | `true`                                              | `true`                                              | **optional**<br> Enable cropping of face as output.                                                                                                                 |
+| `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                           |
+| `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                |
+| `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                          |
+| `MRZ`               | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable MRZ scanning.                                                                                                                               |
+| `onComplete`        | javascript function     |                                                     | `function(data) {console.log(data)}`                | **required**<br> Callback function on _complete_.                                                                                                                   |
+| `onError`           | javascript function     | `function(error) {console.log(error)}`              | `function(error) {console.log(error)}`              | **required**<br> Callback function on _error_.                                                                                                                      |
+| `onImage`           | javascript function     | `function(data) {console.log(data)}`                | `function(data) {console.log(data)}`                | **optional**<br> Callback function on _image_.                                                                                                                      |
+| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`              | `function(error) {window.history.back()}`           | **required**<br> Callback function on _user exit_.                                                                                                                  |
+| `ROI_MODE`          | string                  | `"landscape-landscape"`                             | `portrait-landscape`                                | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                         |
+| `TOKEN`             | string                  |                                                     | see [SDK Token](#sdk-token)                         | **required**<br> Datachecker SDK token.                                                                                                                             |
 
 ## Asset fetching Configuration
 
@@ -474,9 +472,40 @@ Example:
 }
 ```
 
+## Allowed documents
+
+The `ALLOWED_DOCUMENTS` setting lets you specify which documents should permit flipping and which should not. This allows you to control how the application handles different types of documents, ensuring that the capture process meets your requirements.
+
+Example:
+
+```javascript
+let AC = new AutoCapture();
+AC.init({
+    CONTAINER_ID: 'AC_mount',
+    ALLOWED_DOCUMENTS: {
+        ID: ['FRONT', 'BACK'],               // Two entries, so flipping is needed
+        PASSPORT: ['FRONT', 'BACK'],         // Two entries, so flipping is needed
+        DUTCH_PASSPORT: undefined,            // Dutch passport will be copied from PASSPORT settings if undefined
+        RESIDENCE_PERMIT: ['FRONT', 'BACK'], // Two entries, so flipping is needed
+        DRIVING_LICENSE: ['FRONT', 'BACK'],  // Two entries, so flipping is needed
+    },
+    TOKEN: "<SDK_TOKEN>",
+    onComplete: function (data) {
+        console.log(data)
+    },
+    onError: function(error) {
+        console.log(error)
+    },
+    onUserExit: function (error) {
+        console.log(error)
+        window.history.back()
+    }
+})
+```
+
 ## MRZ
 
-The application offers Machine Readable Zone (MRZ) scanning functionality, which allows it to extract information from documents containing MRZ data. This is achieved through Optical Character Recognition (OCR) techniques. The application includes an internal OCR engine specifically designed for MRZ scanning. Additionally, users have the option to integrate an external OCR engine (see [External MRZ](#external-mrz)) for MRZ scanning if the internal OCR engine consumes excessive RAM.
+The application supports Machine Readable Zone (MRZ) scanning, enabling it to extract information from documents with MRZ data using Optical Character Recognition (OCR) techniques. The internal OCR engine previously used for this purpose has been removed, so now only an external OCR engine is available for MRZ scanning. Users can integrate an external OCR engine (see [External MRZ](#external-mrz)) to handle MRZ scanning.
 
 ### Supported Document Types
 
@@ -492,10 +521,7 @@ The MRZ scanning tool supports various types of documents, including:
 The MRZ scanning process involves the following steps:
 
 1. **Quality Checks**: MRZ scanning initiates only after passing all necessary quality checks to ensure the document's readability.
-2. **Crop and Perspective Correction**:
-    The tool identifies the location of the MRZ on the document and performs cropping and perspective correction to isolate the MRZ area. This cropped section is then used as an image for the scanning process.
-    - Note: When an external OCR is used, the image that will be used is the cropped card instead of the isolated MRZ area. (see [External MRZ](#external-mrz))
-
+2. **Perspective Correction**: When using an external OCR, the application will crop the region of interest (ROI) from the image and rotate it based on the detected card's orientation. For more details, see [External MRZ](#external-mrz).
 3. **Retries**: If the initial scan does not yield the desired results, the tool offers the option to retry scanning. In that case, the tool will try to use the next frame. Only frames that pass all the quality checks will be used. The number of retries can be configured using the following setting: (see [Configuration](#configuration)).
 
     `MRZ_RETRIES: 5`
@@ -510,14 +536,10 @@ To enable MRZ scanning use `MRZ: true`(see [Configuration](#configuration)).
 
 ### MRZ Configuration (MRZ_SETTINGS)
 
-| **ATTRIBUTE**     | **FORMAT**      | **DEFAULT VALUE**                                            | **EXAMPLE**                                                  | **NOTES**                                                                                                                    |
-| ----------------- | --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| `FLIP_EXCEPTION`  | Array\<String\> | `[]`                                                         | `["P"]`                                                      | **optional**<br> If `FLIP` is `true` skip these misc values. Examples of possible misc values are: `["P", "I", "D"]`.        |
-| `FLIP_INCLUDE`    | Array\<Object\> | `[{ "misc": "all", "country": "all", "nationality": "all"}]` | `[{ "misc": "P", "country": "NLD", "nationality": "NLD", }]` | **optional**<br> If `FLIP` is `true` only flip if these values are included in the `mrz` output.                             |
-| `FLIP`            | bool            | `true`                                                       | `true`                                                       | **optional**<br> Prompt user to flip card.                                                                                   |
-| `MIN_VALID_SCORE` | int             | `50`                                                         | `50`                                                         | **optional**<br> Minimum valid score of MRZ. The valid score is a range between 0-100 indicating how valid the found MRZ is. |
-| `MRZ_RETRIES`     | int             | `5`                                                          | `5`                                                          | **optional**<br> Amount of retries for MRZ scanning before continuing. Use `-1` for infinite retries.                        |
-| `OCR`             | bool            | `true`                                                       | `true`                                                       | **optional**<br> Wether to use the internal OCR for MRZ reading. An external OCR can also be used see [MRZ](#mrz).           |
+| **ATTRIBUTE**     | **FORMAT** | **DEFAULT VALUE** | **EXAMPLE** | **NOTES**                                                                                                                    |
+| ----------------- | ---------- | ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `MIN_VALID_SCORE` | int        | `50`              | `50`        | **optional**<br> Minimum valid score of MRZ. The valid score is a range between 0-100 indicating how valid the found MRZ is. |
+| `MRZ_RETRIES`     | int        | `5`               | `5`         | **optional**<br> Amount of retries for MRZ scanning before continuing. Use `-1` for infinite retries.                        |
 
 Example:
 
@@ -528,27 +550,7 @@ AC.init({
     MRZ: true,
     MRZ_SETTINGS: {
         MRZ_RETRIES: -1,
-        FLIP: true,
-        FLIP_EXCEPTION: [],
-        FLIP_INCLUDE: [
-            {
-                "misc": "I",
-                "country": "all",
-                "nationality": "all",
-            },
-            {
-                "misc": "D",
-                "country": "all",
-                "nationality": "all",
-            },
-            {
-                "misc": "P",
-                "country": "NLD",
-                "nationality": "NLD",
-            },
-        ],
         MIN_VALID_SCORE: 90,
-        OCR: true
     },
     TOKEN: "<SDK_TOKEN>",
     onComplete: function (data) {
@@ -648,7 +650,6 @@ The SDK will output in the following structure:
         "score": "...",
         "data": "...base64_img"
     },
-    "force_capture": ["bool"],
     "meta": [
         {
             "angle": "...",
@@ -673,7 +674,6 @@ With MRZ:
         "score": "...",
         "data": "...base64_img"
     },
-    "force_capture": [false, false],
     "meta": [
         {
             "angle": "...",
@@ -737,10 +737,6 @@ Example:
         "score": 0.9,
         "data": "iVBORw0KGgoAAAANSUhEUgAAAysAAAS..."
     },
-    "force_capture": [
-        false,
-        true
-    ],
     "meta": [
         {
             "angle": 0,

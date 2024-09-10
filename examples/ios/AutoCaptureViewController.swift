@@ -120,7 +120,6 @@ extension AutoCaptureViewController: WKNavigationDelegate {
                 CONTAINER_ID: 'AC_mount',
                 LANGUAGE: 'en',
                 MRZ: false,
-                CROP_CARD: true,
                 ASSETS_MODE: "LOCAL",
                 ASSETS_FOLDER:"\(assetsUrl!)",
                 TOKEN:"\(token!)",
