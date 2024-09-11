@@ -1,6 +1,6 @@
 # *CHANGELOG*
 
-## *CHANGES* v4.0.1
+## *CHANGES* v4.0.2
 
 This is a major update. If you are currently using version 3, there is a [migration guide](docs/migration_guide_v4.md) available to help you transition to version 4.
 
