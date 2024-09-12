@@ -277,11 +277,16 @@ AC.init({
 });
 ```
 
-To stop the camera and delete the container with its contents the `stop` function can be called. This function will automatically be called within `onComplete`, `onError` and `onUserExit` thus do not have to be called within your own custom versions of these functions.
+To stop the camera and empty the container with its contents the `stop` function can be called. This function will automatically be called within `onComplete`, `onError` and `onUserExit` thus do not have to be called within your own custom versions of these functions.
 
 ```javascript
-...
 AC.stop();
+```
+
+If you wish to completely remove the container (identified by `CONTAINER_ID`), use the remove command:
+
+```javascript
+AC.remove();
 ```
 
 Example below:

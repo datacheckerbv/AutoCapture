@@ -106,7 +106,6 @@ type AllowedDocuments = {
     MRZ: boolean;
     MRZ_SETTINGS: MRZSettings;
     ALWAYS_FLIP: boolean;
-    DETECT_PAPER: boolean;
     ASSETS_MODE?: 'CDN' | 'LOCAL';
     ASSETS_FOLDER?: string;
     onComplete?: (data: AutocaptureResponse) => void;
