@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v4.1.0
+
+- **Enhanced detection model**: The detection model has been upgraded to support the latest NLD 2024 cards, offering improved accuracy and performance.
+
 ## *CHANGES* v4.0.3
 
 This is a major update. If you are currently using version 3, there is a [migration guide](docs/migration_guide_v4.md) available to help you transition to version 4.
