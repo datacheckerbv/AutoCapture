@@ -1,5 +1,11 @@
 # *CHANGELOG*
 
+## *CHANGES* v4.1.1
+
+- **Increased resolution**: The maximum resolution has been increased to 3840x2160 for sharper output images.
+- **Output format change**: Changed the output format from PNG to JPEG to reduce the size of the output images.
+- **Bug Fix**: Improved blur detection to enhance image quality.
+
 ## *CHANGES* v4.1.0
 
 - **Enhanced detection model**: The detection model has been upgraded to support the latest NLD 2024 cards, offering improved accuracy and performance.
