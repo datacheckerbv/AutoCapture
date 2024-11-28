@@ -1,5 +1,15 @@
 # *CHANGELOG*
 
+## *CHANGES* v4.1.2
+
+- **Enhanced detection model**: The detection model has been upgraded.
+- **Improved blur detection**: Blur detection has been enhanced by leveraging higher resolution images, ensuring better image quality and more accurate detection results.
+- **Focus check improvement**: The focus check has been improved by implementing a motion detection algorithm, providing more reliable focus assessment.
+- **Blur alert change**: The "blur" alert has been updated. (see [Languages](README.md#languages))
+- **iOS Pro phones zoom**: Implemented a 1.5x zoom on iOS Pro phones (3 lenses) to address focus issues caused by automatic camera switching.
+- **Decreased consecutive good frames**: The number of consecutive good frames required has been decreased, resulting in faster capturing.
+- **Version number display**: The version number is now visible on the screen, providing users with clear information about the current version of the application.
+
 ## *CHANGES* v4.1.1
 
 - **Increased resolution**: The maximum resolution has been increased to 3840x2160 for sharper output images.
