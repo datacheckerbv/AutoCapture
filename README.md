@@ -95,7 +95,6 @@ To run this tool, you will need initialise with the following variables.
 | `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration)) |
 | `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                         | `"#1d3461"`                                         | **optional**<br> Specifies the background color using a hex color code.                                                                                             |
 | `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                  |
-| `CROP_FACE`         | bool                    | `true`                                              | `true`                                              | **optional**<br> Enable cropping of face as output.                                                                                                                 |
 | `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                           |
 | `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                |
 | `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                          |
@@ -407,7 +406,6 @@ var LANGUAGE = {
     "std_msg_0": "Place your document",
     "exp_dark": "Environment is too dark",
     "exp_bright": "Environment is too bright",
-    "blur": "Image is too blurry",
     "glare": "Glare detected",
     "size": "Move closer",
     "focus": "Hold still...",
@@ -439,7 +437,6 @@ AC.init({
             "std_msg_0": "Place your document in the frame",
             "exp_dark": "Environment is too dark",
             "exp_bright": "Environment is too bright",
-            "blur": "Hold still...",
             "glare": "Glare detected",
             "size": "Move closer",
             "focus": "Focus on document.",
@@ -460,22 +457,6 @@ AC.init({
 
 The tool uses a collection of neural networks. Make sure that you host the full directory so the models can be accessed. The models path can be configured. (see [Configuration](#configuration))
 The models are located under `models/`.
-
-## Face
-
-There is a face detector within the SDK. This detector will try to find the portrait picture on the document. If it is found, this face will be present in the output. Else, the output will not have any mention of `face`. When more faces are found only one face is being returned. The face with the highest score will be returned.
-
-Example:
-
-```json
-{
-    "image": ["...base64_img"],
-    "face": {
-        "score": 0.9,
-        "data": "...base64_img"
-    },
-}
-```
 
 ## Allowed documents
 
@@ -651,10 +632,6 @@ The SDK will output in the following structure:
 ```json
 {
     "image": ["...base64_img"],
-    "face": {
-        "score": "...",
-        "data": "...base64_img"
-    },
     "meta": [
         {
             "angle": "...",
@@ -675,10 +652,6 @@ With MRZ:
 ```json
 {
     "image": ["...base64_img"],
-    "face": {
-        "score": "...",
-        "data": "...base64_img"
-    },
     "meta": [
         {
             "angle": "...",
@@ -738,10 +711,6 @@ Example:
 ```json
 {
     "image": ["iVBORw0KGgoAAAANSUhEUgAAAysAAAS..."],
-    "face": {
-        "score": 0.9,
-        "data": "iVBORw0KGgoAAAANSUhEUgAAAysAAAS..."
-    },
     "meta": [
         {
             "angle": 0,

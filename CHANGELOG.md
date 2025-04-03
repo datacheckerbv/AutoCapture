@@ -1,5 +1,14 @@
 # *CHANGELOG*
 
+## *CHANGES* v5.0.0
+
+- **Enhanced detection model**: The detection model has been upgraded to improve accuracy and performance, now supporting Sedula documents and providing better detection for Dutch Driving Licenses.
+- **Disabled blur quality control**: The blur quality control has been removed from the detection process. See [Languages](README.md#languages) for the removed `blur` alert message.
+
+### Breaking Changes v5.0.0
+
+- **Removed face cropping**: The `CROP_FACE` functionality has been removed. Thus, the `'face'` output will no longer be present in the output.
+
 ## *CHANGES* v4.1.2
 
 - **Enhanced detection model**: The detection model has been upgraded.
