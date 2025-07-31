@@ -1,5 +1,10 @@
 # *CHANGELOG*
 
+## *CHANGES* v5.0.1
+
+- **Improved Camera Selection for iOS Triple Cameras**: Addressed issues with iPhones featuring three cameras, where automatic switching sometimes resulted in blurry images. The camera selection logic has been enhanced to reliably choose the correct camera based on the device's system language. Supported languages include: English, Dutch, Spanish, German, French, Italian, Polish, Romanian, Slovak, Ukrainian, Czech, Bulgarian, Hungarian, Lithuanian, and Portuguese. For unsupported languages or devices other than iPhone with three cameras, the default back camera will be used.
+- **Bug Fix**: Fixed an issue where coordinates in metadata were not returned correctly.
+
 ## *CHANGES* v5.0.0
 
 - **Enhanced detection model**: The detection model has been upgraded to improve accuracy and performance, now supporting Sedula documents and providing better detection for Dutch Driving Licenses.
