@@ -1,6 +1,6 @@
 # AutoCapture
 
-This project contains Datachecker's AutoCapture tool, that captures images of identity documents (ID/Passport/Driver license). The tool only takes a capture once a document is detected and it passes the quality control.
+This project contains Datachecker's AutoCapture tool, that captures images of paper documents + identity documents (ID/Passport/Driver license). The tool only takes a capture once a document is detected and it passes the quality control.
 
 The tool will be run in the browser and is therefore written in JavaScript.
 
@@ -86,25 +86,51 @@ fetch(<BASE_ENDPOINT>+"/sdk/token?customer_reference=<CUSTOMER>&services=AUTO_CA
 
 To run this tool, you will need initialise with the following variables.
 
-| **ATTRIBUTE**       | **FORMAT**              | **DEFAULT VALUE**                                   | **EXAMPLE**                                         | **NOTES**                                                                                                                                                           |
-| ------------------- | ----------------------- | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ALLOWED_DOCUMENTS` | object                  | see [ALLOWED DOCUMENTS](#allowed-documents)         | see [ALLOWED DOCUMENTS](#allowed-documents)         | **optional**<br> Enable or disable flipping of certain documents.                                                                                                   |
-| `ALWAYS_FLIP`       | bool                    | `false`                                             | `true`                                              | **optional**<br> Always perform flipping even when `MRZ` scanning is `false`.                                                                                       |
-| `APPROVAL`          | bool                    | `false`                                             | `false`                                             | **optional**<br> Approval screen after capture as an extra quality check.                                                                                           |
-| `ASSETS_FOLDER`     | string                  | `""`                                                | `"../"`                                             | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                        |
-| `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration)) |
-| `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                         | `"#1d3461"`                                         | **optional**<br> Specifies the background color using a hex color code.                                                                                             |
-| `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                  |
-| `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                           |
-| `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                |
-| `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                          |
-| `MRZ`               | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable MRZ scanning.                                                                                                                               |
-| `onComplete`        | javascript function     |                                                     | `function(data) {console.log(data)}`                | **required**<br> Callback function on _complete_.                                                                                                                   |
-| `onError`           | javascript function     | `function(error) {console.log(error)}`              | `function(error) {console.log(error)}`              | **required**<br> Callback function on _error_.                                                                                                                      |
-| `onImage`           | javascript function     | `function(data) {console.log(data)}`                | `function(data) {console.log(data)}`                | **optional**<br> Callback function on _image_.                                                                                                                      |
-| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`              | `function(error) {window.history.back()}`           | **required**<br> Callback function on _user exit_.                                                                                                                  |
-| `ROI_MODE`          | string                  | `"landscape-landscape"`                             | `portrait-landscape`                                | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                         |
-| `TOKEN`             | string                  |                                                     | see [SDK Token](#sdk-token)                         | **required**<br> Datachecker SDK token.                                                                                                                             |
+| **ATTRIBUTE**       | **FORMAT**              | **DEFAULT VALUE**                                   | **EXAMPLE**                                         | **NOTES**                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------- | ----------------------- | --------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ALLOWED_DOCUMENTS` | object                  | see [ALLOWED DOCUMENTS](#allowed-documents)         | see [ALLOWED DOCUMENTS](#allowed-documents)         | **optional**<br> Enable or disable flipping of certain documents.                                                                                                                                                                                                                                                                                                                                              |
+| `ALWAYS_FLIP`       | bool                    | `false`                                             | `true`                                              | **optional**<br> Always perform flipping even when `MRZ` scanning is `false`.                                                                                                                                                                                                                                                                                                                                  |
+| `APPROVAL`          | bool                    | `false`                                             | `false`                                             | **optional**<br> Approval screen after capture as an extra quality check.                                                                                                                                                                                                                                                                                                                                      |
+| `ASSETS_FOLDER`     | string                  | `""`                                                | `"../"`                                             | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                                                   |
+| `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                            |
+| `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                         | `"#1d3461"`                                         | **optional**<br> Specifies the background color using a hex color code.                                                                                                                                                                                                                                                                                                                                        |
+| `CAPTURE_BTN_AFTER` | int                     | `0` (AutoCapture) / `5000` (PaperCapture)           | `0`                                                 | **optional**<br> Configures a delay for the capture button's appearance in milliseconds. Setting this parameter to `0` disables the button. **Use of the capture button is discouraged, as it bypasses the automatic quality control checks.** It is included only as a fallback mechanism. If you choose to enable it, it is recommended to show the button only after a delay, not immediately at the start. |
+| `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                                                                                                                                                                                                                             |
+| `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                                                                                                                                                                                                                                                                      |
+| `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                                                                                                                                                                                                                                                           |
+| `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                                                                                                                                                                                                                                                                     |
+| `MRZ`               | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable MRZ scanning.                                                                                                                                                                                                                                                                                                                                                                          |
+| `onComplete`        | javascript function     |                                                     | `function(data) {console.log(data)}`                | **required**<br> Callback function on _complete_.                                                                                                                                                                                                                                                                                                                                                              |
+| `onError`           | javascript function     | `function(error) {console.log(error)}`              | `function(error) {console.log(error)}`              | **required**<br> Callback function on _error_.                                                                                                                                                                                                                                                                                                                                                                 |
+| `onImage`           | javascript function     | `function(data) {console.log(data)}`                | `function(data) {console.log(data)}`                | **optional**<br> Callback function on _image_.                                                                                                                                                                                                                                                                                                                                                                 |
+| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`              | `function(error) {window.history.back()}`           | **required**<br> Callback function on _user exit_.                                                                                                                                                                                                                                                                                                                                                             |
+| `ROI_MODE`          | string                  | `"landscape-landscape"`                             | `portrait-landscape`                                | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                                                                                                                                                                                                                    |
+| `SDK_MODE`          | string                  | `"autocapture"`                                     | `"papercapture"`                                    | **optional**<br> Specifies mode of the SDK, supported modes are: `"autocapture"`, `"papercapture"` (see [SDK Modes](#sdk-modes))                                                                                                                                                                                                                                                                               |
+| `TOKEN`             | string                  |                                                     | see [SDK Token](#sdk-token)                         | **required**<br> Datachecker SDK token.                                                                                                                                                                                                                                                                                                                                                                        |
+
+## SDK Modes
+
+The SDK offers two operational modes:
+
+- **AutoCapture**: Optimized for real-time capture of identity documents such as IDs, passports, and driver licenses. A capture is triggered only when a document is detected and passes all quality checks.
+- **PaperCapture**: Tailored for capturing paper documents (e.g., work permits). Like AutoCapture, it ensures a capture occurs only after document detection and successful quality validation.
+
+Refer to [Configuration](#configuration) for details on how to set the desired mode.
+
+### PaperCapture Configuration
+
+```javascript
+let AC = new AutoCapture();
+AC.init({
+    CONTAINER_ID: ...,
+    LANGUAGE: ...,
+    TOKEN: ...,
+    SDK_MODE: "papercapture",
+    onComplete: ...,
+    onError: ...,
+    onUserExit: ...
+});
+```
 
 ## Asset fetching Configuration
 
@@ -640,7 +666,8 @@ The SDK will output in the following structure:
                 ["...", "..."],
                 ["...", "..."],
                 ["...", "..."]
-            ]
+            ],
+            "force_capture": "..."
         }
     ],
     "token": "sdk_token"
@@ -660,7 +687,8 @@ With MRZ:
                 ["...", "..."],
                 ["...", "..."],
                 ["...", "..."]
-            ]
+            ],
+            "force_capture": "..."
         }
     ],
     "mrz": {
@@ -719,7 +747,8 @@ Example:
                 [0, 100],
                 [150, 100],
                 [150, 0]
-            ]
+            ],
+            "force_capture": false
         }
     ],
     "mrz": {

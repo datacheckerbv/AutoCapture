@@ -1,5 +1,24 @@
 # *CHANGELOG*
 
+## *CHANGES* v5.1.0
+
+- **Improved processing time**: The processing time has been significantly reduced, resulting in faster image processing and detection.
+
+- **PaperCapture support**: The SDK now supports capturing paper documents in addition to identity documents. (see [Configuration](README.md#configuration))
+  - **Added `CAPTURE_BTN_AFTER` setting**: Enables a manual capture button, available for both AutoCapture and PaperCapture modes.
+  - **Added `SDK_MODE` setting**: Allows configuration of the SDK mode as either `'autocapture'` or `'papercapture'` for tailored usage.
+
+- **Enhanced user experience**:
+  - **Tap to start after camera selection**: Now you are required to *tap to start* again after changing cameras, this is done to prevent the SDK from automatically resuming the capturing process.
+  - **Improved focus detection**: Enhanced focus checks provide more reliable detection and faster processing.
+  - **Better quality control**: Quality checks are now more targeted based on the selected SDK mode for improved accuracy.
+
+- **Bug fixes and improvements**:
+  - Improved frame processing efficiency for smoother performance.
+  - Enhanced coordinate detection for more accurate document positioning.
+  - Enhanced tutorial animations
+  - Moved ML engine to separate Web Worker for improved memory management.
+
 ## *CHANGES* v5.0.1
 
 - **Improved Camera Selection for iOS Triple Cameras**: Addressed issues with iPhones featuring three cameras, where automatic switching sometimes resulted in blurry images. The camera selection logic has been enhanced to reliably choose the correct camera based on the device's system language. Supported languages include: English, Dutch, Spanish, German, French, Italian, Polish, Romanian, Slovak, Ukrainian, Czech, Bulgarian, Hungarian, Lithuanian, and Portuguese. For unsupported languages or devices other than iPhone with three cameras, the default back camera will be used.
