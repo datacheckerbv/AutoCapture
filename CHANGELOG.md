@@ -1,5 +1,10 @@
 # *CHANGELOG*
 
+## *CHANGES* v5.1.1
+
+- **Updated README**: The README file has been updated to include the latest changes and improvements in the SDK. See [Languages](README.md#languages) for the updated alert messages.
+- **Bug Fix**: Resolved an issue where the SDK run into OOM (Out Of Memory) errors on certain devices during multiple instances of the SDK in the same environment. This fix ensures smoother performance and stability when using multiple instances.
+
 ## *CHANGES* v5.1.0
 
 - **Improved processing time**: The processing time has been significantly reduced, resulting in faster image processing and detection.
