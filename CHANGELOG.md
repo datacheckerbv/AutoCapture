@@ -1,5 +1,20 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.0
+
+- **Heatmap-driven detection pipeline**: Document inference now leverages heatmap-based corner extraction, exposing orientation and IoU scores for more reliable cropping.
+- **Expanded quality checks**: Added straightness, corner completeness and occlusion validations to block poor frames before capture.
+- **Unified AutoCapture and PaperCapture pipelines**: Shared base processing keeps ROI rendering, flip handling, and quality control consistent across modes.
+- **Updated user messaging**: Language packs now include prompts for corner alignment, occlusion, and straightening while removing MRZ-specific alerts.
+- **OpenCV WebAssembly upgrade**: Switched to the SIMD-enabled build and reorganized asset paths for faster preprocessing across supported browsers.
+
+### Breaking Changes v6.0.0
+
+- **MRZ** support removed: The MRZ detection and scanning functionality has been removed from the SDK. As a result, the following settings have been removed: `MRZ_SETTINGS`, `MRZ`.
+- **Removed `onImage` callback**: The `onImage` callback hook is no longer emitted and must be removed from integrations.
+- **Removed `ALWAYS_FLIP` setting**: Flip behaviour is handled automatically; the `ALWAYS_FLIP` configuration flag is no longer supported.
+- **SIMD only**: The SDK now exclusively uses the SIMD (Single Instruction, Multiple Data) version of WebAssembly for improved performance.
+
 ## *CHANGES* v5.1.1
 
 - **Updated README**: The README file has been updated to include the latest changes and improvements in the SDK. See [Languages](README.md#languages) for the updated alert messages.

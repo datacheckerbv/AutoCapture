@@ -89,7 +89,6 @@ To run this tool, you will need initialise with the following variables.
 | **ATTRIBUTE**       | **FORMAT**              | **DEFAULT VALUE**                                   | **EXAMPLE**                                         | **NOTES**                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ------------------- | ----------------------- | --------------------------------------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ALLOWED_DOCUMENTS` | object                  | see [ALLOWED DOCUMENTS](#allowed-documents)         | see [ALLOWED DOCUMENTS](#allowed-documents)         | **optional**<br> Enable or disable flipping of certain documents.                                                                                                                                                                                                                                                                                                                                              |
-| `ALWAYS_FLIP`       | bool                    | `false`                                             | `true`                                              | **optional**<br> Always perform flipping even when `MRZ` scanning is `false`.                                                                                                                                                                                                                                                                                                                                  |
 | `APPROVAL`          | bool                    | `false`                                             | `false`                                             | **optional**<br> Approval screen after capture as an extra quality check.                                                                                                                                                                                                                                                                                                                                      |
 | `ASSETS_FOLDER`     | string                  | `""`                                                | `"../"`                                             | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                                                   |
 | `ASSETS_MODE`       | string                  | `"CDN"`                                             | `"LOCAL"`                                           | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                            |
@@ -98,11 +97,8 @@ To run this tool, you will need initialise with the following variables.
 | `CONTAINER_ID`      | string                  |                                                     | `"AC_mount"`                                        | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                                                                                                                                                                                                                             |
 | `DEBUG`             | bool                    | `false`                                             | `false`                                             | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                                                                                                                                                                                                                                                                      |
 | `LANGUAGE`          | string                  | `"nl"`                                              | `"nl"`                                              | **required**<br> Notifications in specific language.                                                                                                                                                                                                                                                                                                                                                           |
-| `MRZ_SETTINGS`      | object                  | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | see [MRZ_SETTINGS](#mrz-configuration-mrz_settings) | **optional**<br> Settings of MRZ scanning.                                                                                                                                                                                                                                                                                                                                                                     |
-| `MRZ`               | bool                    | `false`                                             | `false`                                             | **optional**<br> Enable MRZ scanning.                                                                                                                                                                                                                                                                                                                                                                          |
 | `onComplete`        | javascript function     |                                                     | `function(data) {console.log(data)}`                | **required**<br> Callback function on _complete_.                                                                                                                                                                                                                                                                                                                                                              |
 | `onError`           | javascript function     | `function(error) {console.log(error)}`              | `function(error) {console.log(error)}`              | **required**<br> Callback function on _error_.                                                                                                                                                                                                                                                                                                                                                                 |
-| `onImage`           | javascript function     | `function(data) {console.log(data)}`                | `function(data) {console.log(data)}`                | **optional**<br> Callback function on _image_.                                                                                                                                                                                                                                                                                                                                                                 |
 | `onUserExit`        | javascript function     | `function(error) {console.log(error)}`              | `function(error) {window.history.back()}`           | **required**<br> Callback function on _user exit_.                                                                                                                                                                                                                                                                                                                                                             |
 | `ROI_MODE`          | string                  | `"landscape-landscape"`                             | `portrait-landscape`                                | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                                                                                                                                                                                                                    |
 | `SDK_MODE`          | string                  | `"autocapture"`                                     | `"papercapture"`                                    | **optional**<br> Specifies mode of the SDK, supported modes are: `"autocapture"`, `"papercapture"` (see [SDK Modes](#sdk-modes))                                                                                                                                                                                                                                                                               |
@@ -191,9 +187,6 @@ AC.init({
     onComplete: function(data) {
         console.log(data);
     },
-    onImage: function(data) {
-        console.log(data);
-    },
     onError: function(error) {
         console.log(error)
     },
@@ -208,7 +201,6 @@ AC.init({
 | ------------- | ------------------- | -------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `onComplete`  | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                                                                                                |
 | `onError`     | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **required**<br> Callback that fires when an _error_ occurs.                                                                                                                                        |
-| `onImage`     | javascript function | `function(data) {console.log(data)}`   | `function(data) {console.log(data)}`      | **optional**<br> Callback that fires when frame succesfully passes quality controls. This callback can be used when you want to process or analyze live frames. (See [External-MRZ](#external-mrz)) |
 | `onUserExit`  | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **required**<br> Callback that fires when the user exits the flow without completing it.                                                                                                            |
 
 ### onComplete
@@ -225,25 +217,6 @@ AC.init({
     ...,
     onComplete: function(data) {
         console.log(data);
-    }
-});
-```
-
-### onImage
-
-This callback function will be called when a frame succesfully passes quality controls. This callback can be used when you want to process or analyze live frames (See [External-MRZ](#external-mrz)). This callback function is **optional**. The `data` parameter within the function represents the frame that succesfully passed the quality controls. It's format is a `base64` image string where the Data URI (`"data:image/png;base64,"`) has been taken off.
-
-Example Web (JS):
-
-Within the example below we are logging the output (`data`) to console.
-
-```javascript
-let AC = new AutoCapture();
-AC.init({
-    ...,
-    onImage: function(data) {
-        // data = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADg....."
-        console.log(data)
     }
 });
 ```
@@ -425,25 +398,27 @@ Example:
 
 ```javascript
 var LANGUAGE = {
-    start_prompt: "Tap to start",
-    flip: "Flip the document",
-    flip_frontside: "Flip the document to the frontside",
-    flip_backside: "Flip the document to the backside",
-    std_msg_0: "Place your document",
-    exp_dark: "Environment is too dark",
-    exp_bright: "Environment is too bright",
-    glare: "Glare detected",
-    size: "Move closer",
-    focus: "Hold still...",
     approval_prompt: "Is the image right?",
-    retry: "Try again",
-    confirm: "Accept",
     capture_error: "We were unable to capture an image. Camera access is required.",
-    mrz_search: "Searching MRZ...",
+    camera_selection: "Please select the back camera",
+    confirm: "Accept",
     continue: "Continue",
-    tutorial: "Follow the instructions",
+    corners: "Not all corners detected",
+    exp_bright: "Environment is too bright",
+    exp_dark: "Environment is too dark",
+    flip: "Flip the document",
+    flip_backside: "Flip the document to the backside",
+    flip_frontside: "Flip the document to the frontside",
+    focus: "Hold still...",
+    glare: "Glare detected",
+    occlusion: "Document is occluded",
+    size: "Move closer",
+    start_prompt: "Tap to start",
+    std_msg_0: "Place your document",
+    straight: "Straighten the document",
+    retry: "Try again",
     rotate_phone: "Please rotate your phone upright",
-    camera_selection: "Please select the back camera"
+    tutorial: "Follow the instructions"
 }
 ```
 
@@ -456,25 +431,27 @@ let AC = new AutoCapture();
 AC.init({
     LANGUAGE: JSON.stringify(
         {
-            start_prompt: "Tap to start",
-            flip: "Flip the document",
-            flip_frontside: "Flip the document to the frontside",
-            flip_backside: "Flip the document to the backside",
-            std_msg_0: "Place your document",
-            exp_dark: "Environment is too dark",
-            exp_bright: "Environment is too bright",
-            glare: "Glare detected",
-            size: "Move closer",
-            focus: "Hold still...",
             approval_prompt: "Is the image right?",
-            retry: "Try again",
-            confirm: "Accept",
             capture_error: "We were unable to capture an image. Camera access is required.",
-            mrz_search: "Searching MRZ...",
+            camera_selection: "Please select the back camera",
+            confirm: "Accept",
             continue: "Continue",
-            tutorial: "Follow the instructions",
+            corners: "Not all corners detected",
+            exp_bright: "Environment is too bright",
+            exp_dark: "Environment is too dark",
+            flip: "Flip the document",
+            flip_backside: "Flip the document to the backside",
+            flip_frontside: "Flip the document to the frontside",
+            focus: "Hold still...",
+            glare: "Glare detected",
+            occlusion: "Document is occluded",
+            size: "Move closer",
+            start_prompt: "Tap to start",
+            std_msg_0: "Place your document",
+            straight: "Straighten the document",
+            retry: "Try again",
             rotate_phone: "Please rotate your phone upright",
-            camera_selection: "Please select the back camera"
+            tutorial: "Follow the instructions"
         }
     ),
     ...
@@ -516,142 +493,6 @@ AC.init({
 })
 ```
 
-## MRZ
-
-The application supports Machine Readable Zone (MRZ) scanning, enabling it to extract information from documents with MRZ data using Optical Character Recognition (OCR) techniques. The internal OCR engine previously used for this purpose has been removed, so now only an external OCR engine is available for MRZ scanning. Users can integrate an external OCR engine (see [External MRZ](#external-mrz)) to handle MRZ scanning.
-
-### Supported Document Types
-
-The MRZ scanning tool supports various types of documents, including:
-
-- **TD1**: Travel Document Type 1
-- **TD2**: Travel Document Type 2
-- **TD3**: Travel Document Type 3
-- **Dutch eDL**: Dutch electronic driver's license
-
-### MRZ Scanning Process
-
-The MRZ scanning process involves the following steps:
-
-1. **Quality Checks**: MRZ scanning initiates only after passing all necessary quality checks to ensure the document's readability.
-2. **Perspective Correction**: When using an external OCR, the application will crop the region of interest (ROI) from the image and rotate it based on the detected card's orientation. For more details, see [External MRZ](#external-mrz).
-3. **Retries**: If the initial scan does not yield the desired results, the tool offers the option to retry scanning. In that case, the tool will try to use the next frame. Only frames that pass all the quality checks will be used. The number of retries can be configured using the following setting: (see [Configuration](#configuration)).
-
-    `MRZ_RETRIES: 5`
-
-    To enable infinite retries, use:
-
-    `MRZ_RETRIES: -1`
-
-### Enabling MRZ Scanning
-
-To enable MRZ scanning use `MRZ: true`(see [Configuration](#configuration)).
-
-### MRZ Configuration (MRZ_SETTINGS)
-
-| **ATTRIBUTE**     | **FORMAT** | **DEFAULT VALUE** | **EXAMPLE** | **NOTES**                                                                                                                    |
-| ----------------- | ---------- | ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `MIN_VALID_SCORE` | int        | `50`              | `50`        | **optional**<br> Minimum valid score of MRZ. The valid score is a range between 0-100 indicating how valid the found MRZ is. |
-| `MRZ_RETRIES`     | int        | `5`               | `5`         | **optional**<br> Amount of retries for MRZ scanning before continuing. Use `-1` for infinite retries.                        |
-
-Example:
-
-```javascript
-let AC = new AutoCapture();
-AC.init({
-    CONTAINER_ID: 'AC_mount',
-    MRZ: true,
-    MRZ_SETTINGS: {
-        MRZ_RETRIES: -1,
-        MIN_VALID_SCORE: 90,
-    },
-    TOKEN: "<SDK_TOKEN>",
-    onComplete: function (data) {
-        console.log(data)
-    },
-    onError: function(error) {
-        console.log(error)
-    },
-    onUserExit: function (error) {
-        console.log(error)
-        window.history.back()
-    }
-})
-```
-
-Example output:
-
-```json
-{   
-    "angle": "...",
-    "type": "PASSPORT",
-    "subtype": "<",
-    "country": "NLD",
-    "lname": "DE",
-    "lname2": "BRUIJN",
-    "spacing": "",
-    "fname": "WILLEKE",
-    "mname1": "LISELOTTE",
-    "name_complement": "",
-    "number": "SPECI2014",
-    "check_digit_document_number": "2",
-    "nationality": "NLD",
-    "date_of_birth": "1965-03-10",
-    "check_digit_date_of_birth": "1",
-    "sex": "F",
-    "expiration_date": "2024-03-09",
-    "check_digit_expiration_date": "6",
-    "complement": "999999990<<<<<84",
-    "mrz_type": "td3",
-    "raw_mrz": [
-        "P<NLDDE<BRUIJN<<WILLEKE<LISELOTTE<<<<<<<<<<<",
-        "SPECI20142NLD6503101F2403096999999990<<<<<84"
-    ],
-    "check_digit_composite": "4",
-    "personal_number": "999999990",
-    "check_digit_personal_number": "8",
-    "valid_number": true,
-    "valid_date_of_birth": true,
-    "valid_expiration_date": true,
-    "valid_personal_number": true,
-    "valid_composite": true,
-    "valid_misc": true,
-    "valid_score": 100,
-    "misc": "P",
-    "names": "WILLEKE LISELOTTE",
-    "surname": "DE BRUIJN"
-}
-```
-
-### External MRZ
-
-It is possible to retrieve the MRZ externally and then send it to the SDK using the following approach:
-
-Using the [onImage](#onimage) Callback
-
-1. Utilize the `onImage` callback to trigger an external process with the current frames.
-
-2. If this external process successfully retrieves the MRZ information, it can then be sent to the SDK using the `parse_mrz` function.
-
-    The `parse_mrz` function expects the MRZ lines as an argument, provided as a single string with line breaks (`"\n"`) separating the lines.
-
-Here's an example of how this can be implemented in JavaScript:
-
-```javascript
-// Initialize the AutoCapture SDK
-let AC = new AutoCapture();
-AC.init({
-    // ... other configurations
-    onImage: function (data) {
-        // External OCR process retrieves MRZ information
-        let MRZ_text = EXTERNAL_OCR_FUNCTION(data); // Example MRZ text: "P<NLDDE<BRUIJN<<WILLEKE<LISELOTTE<<<<<<<<<<<\nSPECI20142NLD6503101F2403096999999990<<<<<84"
-        
-        // Send the retrieved MRZ information to the SDK for parsing
-        AC.parse_mrz(MRZ_text);
-    },
-});
-```
-
 ## Output
 
 The SDK will output in the following structure:
@@ -675,66 +516,6 @@ The SDK will output in the following structure:
 }
 ```
 
-With MRZ:
-
-```json
-{
-    "image": ["...base64_img"],
-    "meta": [
-        {
-            "angle": "...",
-            "coordinates": [
-                ["...", "..."],
-                ["...", "..."],
-                ["...", "..."],
-                ["...", "..."]
-            ],
-            "force_capture": "..."
-        }
-    ],
-    "mrz": {
-        "angle": "...",
-        "type": "...",
-        "subtype": "...",
-        "country": "...",
-        "lname": "...",
-        "lname2": "...",
-        "spacing": "...",
-        "fname": "...",
-        "mname1": "...",
-        "name_complement": "...",
-        "number": "...",
-        "check_digit_document_number": "...",
-        "nationality": "...",
-        "date_of_birth": "...",
-        "check_digit_date_of_birth": "...",
-        "sex": "...",
-        "expiration_date": "...",
-        "check_digit_expiration_date": "...",
-        "complement": "...",
-        "mrz_type": "...",
-        "raw_mrz": [
-            "...",
-            "..."
-        ],
-        "check_digit_composite": "...",
-        "personal_number": "...",
-        "check_digit_personal_number": "...",
-        "valid_number": true,
-        "valid_date_of_birth": true,
-        "valid_expiration_date": true,
-        "valid_personal_number": true,
-        "valid_composite": true,
-        "valid_misc": true,
-        "valid_score": true,
-        "misc": "...",
-        "names": "...",
-        "surname": "..."
-    },
-    "token": "sdk_token"
-}
-```
-
 Example:
 
 ```json
@@ -752,45 +533,6 @@ Example:
             "force_capture": false
         }
     ],
-    "mrz": {
-        "angle": "...",
-        "type": "PASSPORT",
-        "subtype": "<",
-        "country": "NLD",
-        "lname": "DE",
-        "lname2": "BRUIJN",
-        "spacing": "",
-        "fname": "WILLEKE",
-        "mname1": "LISELOTTE",
-        "name_complement": "",
-        "number": "SPECI2014",
-        "check_digit_document_number": "2",
-        "nationality": "NLD",
-        "date_of_birth": "1965-03-10",
-        "check_digit_date_of_birth": "1",
-        "sex": "F",
-        "expiration_date": "2024-03-09",
-        "check_digit_expiration_date": "6",
-        "complement": "999999990<<<<<84",
-        "mrz_type": "td3",
-        "raw_mrz": [
-            "P<NLDDE<BRUIJN<<WILLEKE<LISELOTTE<<<<<<<<<<<",
-            "SPECI20142NLD6503101F2403096999999990<<<<<84"
-        ],
-        "check_digit_composite": "4",
-        "personal_number": "999999990",
-        "check_digit_personal_number": "8",
-        "valid_number": true,
-        "valid_date_of_birth": true,
-        "valid_expiration_date": true,
-        "valid_personal_number": true,
-        "valid_composite": true,
-        "valid_misc": true,
-        "valid_score": 100,
-        "misc": "P",
-        "names": "WILLEKE LISELOTTE",
-        "surname": "DE BRUIJN"
-    },
     "token": "sdk_token"
 }
 ```

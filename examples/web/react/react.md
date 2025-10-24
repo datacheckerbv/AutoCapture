@@ -36,9 +36,6 @@ const AutoCaptureComponent = () => {
         onComplete: function(data) {
           console.log(data);
         },
-        onImage: function(data) {
-          console.log(data);
-        },
         onError: function(error) {
           console.log(error)
         },
@@ -61,18 +58,8 @@ Create a file autocapture.d.ts & copy the following type definition and extend i
 
 ```ts
 declare module '@datachecker/autocapture' {
-  export type AutocaptureMrz = {
-    type: string;
-    subtype: string;
-    country: string;
-    nationality: string;
-    raw_mrz: Array<string>;
-    valid_score: boolean;
-  };
-
   export type AutocaptureResponse = {
     images: string[];
-    mrz: AutocaptureMrz;
     face?: {
       score: number;
       data: string;
@@ -83,12 +70,6 @@ declare module '@datachecker/autocapture' {
     data: string;
     type: string;
     additional_document_type?: string;
-    mrz?: AutocaptureMrz;
-  };
-
-  type MRZSettings = {
-    MRZ_RETRIES: number;
-    MIN_VALID_SCORE: number;
   };
 
 type AllowedDocuments = {
@@ -103,13 +84,9 @@ type AllowedDocuments = {
     CONTAINER_ID: string;
     LANGUAGE: string;
     TOKEN: string;
-    MRZ: boolean;
-    MRZ_SETTINGS: MRZSettings;
-    ALWAYS_FLIP: boolean;
     ASSETS_MODE?: 'CDN' | 'LOCAL';
     ASSETS_FOLDER?: string;
     onComplete?: (data: AutocaptureResponse) => void;
-    onImage?: (data: string) => void;
     onError?: (error: Error) => void;
     onUserExit?: (error: Error) => void;
   }

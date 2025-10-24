@@ -1,6 +1,6 @@
 {
   "name": "@datachecker/autocapture",
-  "version": "v5.1.1",
+  "version": "v6.0.0",
   "description": "This project contains Datachecker's AutoCapture tool, that captures images of identity documents (ID/Passport/Driver license). The tool only takes a capture once a document is detected and it passes the quality control.",
   "main": "dist/autocapture.obf.js",
   "directories": {
@@ -36,7 +36,7 @@
     "copy-webpack-plugin": "^12.0.2",
     "crypto-js": "^4.2.0",
     "css-loader": "^6.9.1",
-    "cypress": "^13.6.4",
+    "cypress": "^13.17.0",
     "file-loader": "^6.2.0",
     "http-server": "^14.1.1",
     "javascript-obfuscator": "^4.1.0",
