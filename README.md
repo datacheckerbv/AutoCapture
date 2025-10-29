@@ -415,7 +415,6 @@ var LANGUAGE = {
     size: "Move closer",
     start_prompt: "Tap to start",
     std_msg_0: "Place your document",
-    straight: "Straighten the document",
     retry: "Try again",
     rotate_phone: "Please rotate your phone upright",
     tutorial: "Follow the instructions"
@@ -448,7 +447,6 @@ AC.init({
             size: "Move closer",
             start_prompt: "Tap to start",
             std_msg_0: "Place your document",
-            straight: "Straighten the document",
             retry: "Try again",
             rotate_phone: "Please rotate your phone upright",
             tutorial: "Follow the instructions"

@@ -1,5 +1,10 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.1
+
+- **Removed straightness check**: The document straightness validation has been removed from the quality control pipeline. The `straight` alert message is no longer shown to users, improving the capture experience by reducing false rejections.
+- **Enhanced focus check**: Focus validation is now applied throughout the entire quality control pipeline instead of only on the last 2 frames, resulting in more consistent focus quality across all captured frames.
+
 ## *CHANGES* v6.0.0
 
 - **Heatmap-driven detection pipeline**: Document inference now leverages heatmap-based corner extraction, exposing orientation and IoU scores for more reliable cropping.
