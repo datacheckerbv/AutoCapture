@@ -471,7 +471,7 @@ let AC = new AutoCapture();
 AC.init({
     CONTAINER_ID: 'AC_mount',
     ALLOWED_DOCUMENTS: {
-        ID: ['FRONT', 'BACK'],               // Two entries, so flipping is needed
+        IDENTITY_CARD: ['FRONT', 'BACK'],               // Two entries, so flipping is needed
         PASSPORT: ['FRONT', 'BACK'],         // Two entries, so flipping is needed
         DUTCH_PASSPORT: undefined,            // Dutch passport will be copied from PASSPORT settings if undefined
         RESIDENCE_PERMIT: ['FRONT', 'BACK'], // Two entries, so flipping is needed

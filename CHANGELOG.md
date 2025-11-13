@@ -1,5 +1,20 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.2
+
+- **Bug Fix**: Fixed Worker initialization failures caused by CORS restrictions when using different hostnames or CDN assets. Workers are now created from blob URLs with properly resolved WASM paths for reliable cross-origin support.
+- **Backward Compatibility**: Added mapping from `ID` to `IDENTITY_CARD` in settings for backward compatibility. Users can now use either `ID` or `IDENTITY_CARD` in the `ALLOWED_DOCUMENTS` configuration. When `ID` is used, it will automatically be mapped to `IDENTITY_CARD` internally. (see [Allowed documents](README.md#allowed-documents))
+  
+  Example:
+
+  ```javascript
+  // Both configurations are now supported:
+  ALLOWED_DOCUMENTS: {
+      ID: ['FRONT', 'BACK'],  // Legacy - automatically mapped to IDENTITY_CARD
+      IDENTITY_CARD: ['FRONT', 'BACK']  // Preferred
+  }
+  ```
+
 ## *CHANGES* v6.0.1
 
 - **Removed straightness check**: The document straightness validation has been removed from the quality control pipeline. The `straight` alert message is no longer shown to users, improving the capture experience by reducing false rejections.
