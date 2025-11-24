@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.4
+
+- **Enhanced document support**: Improved support for `NLD Residence Permit Diplomatic`.
+
 ## *CHANGES* v6.0.3
 
 - **Added `DESKTOP_MODE` setting**: Introduced a development/testing mode that enables all cameras regardless of `facingMode` filtering. **FOR TESTING ONLY - NOT FOR PRODUCTION USE.** Desktop cameras are typically labeled with `facingMode: 'user'` instead of `'environment'`, which would normally be filtered out. This mode bypasses camera filtering to facilitate testing on desktop devices. Production environments should always use the default `false` value to ensure only back-facing cameras are available on mobile devices. (see [Configuration](README.md#configuration))
