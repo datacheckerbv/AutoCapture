@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.5
+
+- **Infrastructure**: Backend infrastructure updates and improvements to the publishing pipeline. No functional changes to the SDK.
+
 ## *CHANGES* v6.0.4
 
 - **Enhanced document support**: Improved support for `NLD Residence Permit Diplomatic`.
