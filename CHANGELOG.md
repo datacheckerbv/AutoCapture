@@ -1,5 +1,10 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.6
+
+- **Enhanced camera selection**: Improved filtering of available cameras to prioritize back-facing devices and exclude virtual or unsupported cameras, ensuring more reliable capture on multi-camera setups. (see `DESKTOP_MODE` in [Configuration](README.md#configuration))
+- **Added device label to output metadata**: The output metadata now includes the label of the active camera device used during capture. This enhancement provides better traceability and context for the captured images, allowing users to identify which camera was utilized in multi-camera setups. The device label can be found in the `device` field of the output metadata. (see [Output](README.md#output))
+
 ## *CHANGES* v6.0.5
 
 - **Infrastructure**: Backend infrastructure updates and improvements to the publishing pipeline. No functional changes to the SDK.
