@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.7
+
+- **Content Security Policy (CSP)**: Added Content Security Policy (CSP) documentation to the README. (see [Content Security Policy (CSP)](README.md#content-security-policy-csp))
+
 ## *CHANGES* v6.0.6
 
 - **Enhanced camera selection**: Improved filtering of available cameras to prioritize back-facing devices and exclude virtual or unsupported cameras, ensuring more reliable capture on multi-camera setups. (see `DESKTOP_MODE` in [Configuration](README.md#configuration))
