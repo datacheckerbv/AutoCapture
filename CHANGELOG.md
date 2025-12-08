@@ -1,5 +1,9 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.8
+
+- **Bug Fix**: Fixed errors caused by frozen or immutable configuration objects by implementing internal cloning of settings to prevent mutations.
+
 ## *CHANGES* v6.0.7
 
 - **Content Security Policy (CSP)**: Added Content Security Policy (CSP) documentation to the README. (see [Content Security Policy (CSP)](README.md#content-security-policy-csp))
