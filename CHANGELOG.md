@@ -1,5 +1,10 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.0.9
+
+- **Improved cropping**: Increased padding for cropped pictures to ensure edges remain visible.
+- **Bug Fix**: Fixed retry button on approval screen not restarting capture.
+
 ## *CHANGES* v6.0.8
 
 - **Bug Fix**: Fixed errors caused by frozen or immutable configuration objects by implementing internal cloning of settings to prevent mutations.
