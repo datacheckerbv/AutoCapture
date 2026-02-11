@@ -1,5 +1,12 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.1.0
+
+- **Manual Capture Button with Instructional Dialog**: Enhanced the manual capture experience when `CAPTURE_BTN_AFTER` is configured (see [Configuration](README.md#configuration)). An instructional dialog now appears before showing the capture button, informing users about the manual capture option. Auto-capture remains enabled while giving users the ability to manually trigger capture at their convenience. The dialog only appears once per session to avoid repetitive interruptions, and supports both autocapture and papercapture SDK modes with appropriate tutorial graphics.
+- **Document Type Validation**: Added real-time validation of captured documents against `ALLOWED_DOCUMENTS` configuration (see [Allowed documents](README.md#allowed-documents)). When a user captures a document type that is not allowed, a clear error message is displayed with a "forbidden" icon, prompting them to use a different document type. Unknown document types (`UNK`) automatically trigger the `onError` callback to ensure only recognized documents are processed.
+- **PaperCapture Mode Enhancement**: The `ALLOWED_DOCUMENTS` configuration is now ignored when `SDK_MODE` is set to `'papercapture'`. Document type validation and restrictions only apply in `'autocapture'` mode, allowing papercapture to process any paper document without configuration constraints.
+- **New Language Translations**: Added `manual_mode` and `not_allowed` messages to both English and Dutch language files for internationalization support (see [Languages](README.md#languages)).
+
 ## *CHANGES* v6.0.9
 
 - **Improved cropping**: Increased padding for cropped pictures to ensure edges remain visible.

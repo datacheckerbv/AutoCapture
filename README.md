@@ -93,7 +93,7 @@ To run this tool, you will need initialise with the following variables.
 | `ASSETS_FOLDER`     | string                  | `""`                                        | `"../"`                                     | **optional**<br> Specifies location of **locally hosted** assets folder. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `ASSETS_MODE`       | string                  | `"CDN"`                                     | `"LOCAL"`                                   | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                                                                                                                                                              |
 | `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                 | `"#1d3461"`                                 | **optional**<br> Specifies the background color using a hex color code.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `CAPTURE_BTN_AFTER` | int                     | `0` (AutoCapture) / `5000` (PaperCapture)   | `0`                                         | **optional**<br> Configures a delay for the capture button's appearance in milliseconds. Setting this parameter to `0` disables the button. **Use of the capture button is discouraged, as it bypasses the automatic quality control checks.** It is included only as a fallback mechanism. If you choose to enable it, it is recommended to show the button only after a delay, not immediately at the start.                                                                                                                                   |
+| `CAPTURE_BTN_AFTER` | int                     | `0` (AutoCapture) / `5000` (PaperCapture)   | `0`                                         | **optional**<br> Configures a delay (in milliseconds) after which an instructional dialog and manual capture button appear. Setting to `0` disables the feature. When enabled, users can manually trigger capture at their convenience while auto-capture remains active. The dialog appears once per session.                                                                                                                                                                                                                                   |
 | `CONTAINER_ID`      | string                  |                                             | `"AC_mount"`                                | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `DEBUG`             | bool                    | `false`                                     | `false`                                     | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `DESKTOP_MODE`      | bool                    | `false`                                     | `false`                                     | **optional**<br> Enables all cameras for testing/development purposes. **FOR TESTING ONLY - DO NOT USE IN PRODUCTION.** Desktop cameras are often labeled with `facingMode: 'user'` instead of `'environment'`, which would normally be filtered out. This mode bypasses camera filtering to allow testing on desktop devices, including virtual cameras. Production environments should always use `false` to ensure only back-facing cameras (environment) are available, preventing accidental use of front-facing cameras on mobile devices. |
@@ -430,6 +430,8 @@ var LANGUAGE = {
     flip_frontside: "Flip the document to the frontside",
     focus: "Hold still...",
     glare: "Glare detected",
+    manual_mode: "Manual capture mode. Press Capture when ready.",
+    not_allowed: "Document type not allowed. Please use a different document.",
     occlusion: "Document is occluded",
     size: "Move closer",
     start_prompt: "Tap to start",
@@ -462,6 +464,8 @@ AC.init({
             flip_frontside: "Flip the document to the frontside",
             focus: "Hold still...",
             glare: "Glare detected",
+            manual_mode: "Manual capture mode. Press Capture when ready.",
+            not_allowed: "Document type not allowed. Please use a different document.",
             occlusion: "Document is occluded",
             size: "Move closer",
             start_prompt: "Tap to start",
@@ -481,20 +485,26 @@ The models are located under `models/`.
 
 ## Allowed documents
 
-The `ALLOWED_DOCUMENTS` setting lets you specify which documents should permit flipping and which should not. This allows you to control how the application handles different types of documents, ensuring that the capture process meets your requirements.
+The `ALLOWED_DOCUMENTS` setting serves two important purposes:
 
-Example:
+1. **Document Type Validation**: Restricts which document types can be captured. If a user attempts to capture a document type not listed in `ALLOWED_DOCUMENTS`, the application will display an error message (using the `not_allowed` language key) with a "forbidden" icon, prompting them to use a different document.
+
+2. **Side Permissions**: Specifies which sides (front, back, or both) are allowed for each document type. This controls the flipping behavior and which sides can be captured.
+
+### Configuration Examples
+
+**Allow both sides of documents:**
 
 ```javascript
 let AC = new AutoCapture();
 AC.init({
     CONTAINER_ID: 'AC_mount',
     ALLOWED_DOCUMENTS: {
-        IDENTITY_CARD: ['FRONT', 'BACK'],               // Two entries, so flipping is needed
-        PASSPORT: ['FRONT', 'BACK'],         // Two entries, so flipping is needed
-        DUTCH_PASSPORT: undefined,            // Dutch passport will be copied from PASSPORT settings if undefined
-        RESIDENCE_PERMIT: ['FRONT', 'BACK'], // Two entries, so flipping is needed
-        DRIVING_LICENSE: ['FRONT', 'BACK'],  // Two entries, so flipping is needed
+        IDENTITY_CARD: ['FRONT', 'BACK'],     // Both front and back sides allowed
+        PASSPORT: ['FRONT', 'BACK'],          // Both front and back sides allowed
+        DUTCH_PASSPORT: undefined,            // Inherits from PASSPORT settings
+        RESIDENCE_PERMIT: ['FRONT', 'BACK'],  // Both front and back sides allowed
+        DRIVING_LICENSE: ['FRONT', 'BACK'],   // Both front and back sides allowed
     },
     TOKEN: "<SDK_TOKEN>",
     onComplete: function (data) {
@@ -509,6 +519,23 @@ AC.init({
     }
 })
 ```
+
+**Restrict to only front side:**
+
+```javascript
+ALLOWED_DOCUMENTS: {
+    IDENTITY_CARD: ['FRONT'],   // Only front side allowed, back side will be rejected
+    PASSPORT: ['FRONT'],        // Only front side allowed, back side will be rejected
+}
+```
+
+**Note**: Any document type not listed in `ALLOWED_DOCUMENTS` will be rejected during capture, triggering the validation error with the "forbidden" icon and displaying the `not_allowed` notification message.
+
+### Handling Unknown Documents
+
+The system may detect an unknown document type when it cannot confidently classify the document. This is represented by the `'UNK'` (unknown) key for both document type and page ID.
+
+**Important**: Unknown documents cannot be added to the `ALLOWED_DOCUMENTS` configuration as `'UNK'` is not a valid document type in the settings validation. When an unknown document is detected, it will automatically trigger the `onError` callback (see [onError](#onerror)) with the error message `"Document type not in allowed documents"`. This is the intended behavior to ensure only recognized and valid document types are processed by the SDK.
 
 ## Output
 
