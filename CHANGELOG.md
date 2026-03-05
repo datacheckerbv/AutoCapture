@@ -1,5 +1,12 @@
 # *CHANGELOG*
 
+## *CHANGES* v6.1.1
+
+- **Alert Stability**: Improved alert handling, repeated alerts no longer flicker, and critical errors stay visible until the user exits or refreshes.
+- **Reduced CPU Usage**: Processing is now capped at a maximum of 20 fps, preventing excessive resource usage on high-refresh-rate devices.
+- **Background Pause**: The SDK now automatically pauses when the app is backgrounded, reducing battery drain and heat on mobile devices.
+- **Bug Fixes**: Various stability fixes including error container isolation, improved motion detection accuracy, and edge case handling.
+
 ## *CHANGES* v6.1.0
 
 - **Manual Capture Button with Instructional Dialog**: Enhanced the manual capture experience when `CAPTURE_BTN_AFTER` is configured (see [Configuration](README.md#configuration)). An instructional dialog now appears before showing the capture button, informing users about the manual capture option. Auto-capture remains enabled while giving users the ability to manually trigger capture at their convenience. The dialog only appears once per session to avoid repetitive interruptions, and supports both autocapture and papercapture SDK modes with appropriate tutorial graphics.
