@@ -1,136 +1,226 @@
-# iOS Integration Guide for AutoCapture Web App
+# iOS Integration Guide for AutoCapture Web SDK
 
-This guide will walk you through the process of integrating a JavaScript web app into an iOS app using the `AutoCaptureViewController` as an example. By following these steps, you will be able to embed your web app within an iOS app and leverage its functionality seamlessly.
+This guide walks you through embedding the AutoCapture web SDK in an iOS app using WKWebView. AutoCapture is a JavaScript-based tool — these instructions show how to run it inside a native Swift app.
 
-Please note that AutoCapture is a web-based tool written in JavaScript. Before proceeding with the iOS integration, make sure to familiarize yourself with the JavaScript documentation to understand how to configure the tool. The following instructions will guide you through running the JavaScript code within a Swift environment.
+Before proceeding, read the [JavaScript documentation](../../README.md) to understand the SDK configuration options.
 
 ## Prerequisites
 
-Before getting started, make sure you have the following:
+- Xcode 15+
+- iOS 15+ deployment target
+- The AutoCapture `dist/` folder (built or downloaded)
 
-- Xcode installed on your development machine.
-- The AutoCapture web app that you want to integrate into your iOS app.
+## Step 1: Add the SDK to Your Project
 
-## Step 1: Set up the iOS Project
+1. Drag the `dist/` folder (containing `index.html`, `autocapture.obf.js`, and `assets/`) into your Xcode project as a **folder reference** (blue folder icon).
 
-1. Launch Xcode and create a new iOS project or open an existing project where you want to integrate the web app.
+2. Ensure the folder is included in your target's **Copy Bundle Resources** build phase.
 
-2. Add the necessary JavaScript files and other web app resources to your Xcode project. Make sure to maintain the directory structure of your web app.
+## Step 2: Create a Custom URL Scheme Handler
 
-3. Create a new Swift file (or use an existing one) and name it `AutoCaptureViewController.swift`. Copy the provided code for the `AutoCaptureViewController` into this file.
-
-4. Import the required frameworks at the top of the `AutoCaptureViewController.swift` file, including `UIKit`, `WebKit`, and `Foundation`.
-
-5. Make sure you have the required dependencies imported. Check if the following dependencies are added to your project's dependencies:
-
-   - UIKit
-   - WebKit
-
-6. Replace any references to `self.token` in the code with your appropriate token value or the property that holds the token response. Make sure to set the `TOKEN` parameter in the JavaScript code inside the `webView(_:didFinish:)` method with the corresponding token value from your model or data structure.
-
-7. Modify your project's `info.plist` to ensure proper functionality and secure user permissions:
-
-   - **Privacy - Camera Usage Description**: Include this key to authorize camera access for the web app. Clearly state why the camera is needed, as this explanation will be presented to users upon the first request for access.
-
-## Step 2: Set the HTML File URL
-
-1. Open the `AutoCaptureViewController.swift` file.
-
-2. Locate the `htmlFileURL` property declaration inside the `AutoCaptureViewController` class.
-
-3. Set the `htmlFileURL` to the location of the imported AutoCapture web app repo within your Xcode project. You can use the `Bundle.main.url` method to get the appropriate URL. For example:
-
-   ```swift
-   htmlFileURL = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "path/to/web/app")!
-   ```
-
-   Replace `"path/to/web/app"` with the actual path to the imported AutoCapture web app repo within your Xcode project.
-
-## Step 3: Storyboard Setup (Optional)
-
-If you prefer to use a storyboard for designing your UI, you can follow these steps:
-
-1. Open the Main.storyboard file (or create a new one).
-
-2. Drag and drop a `WKWebView` onto your view controller's scene.
-
-3. Connect the `webView` outlet in the `AutoCaptureViewController` to the `WKWebView` you added in the storyboard.
-
-4. Set up the desired constraints for the `WKWebView` to define its position and size on the screen.
-
-## Step 4: Configuring the WebView
-
-1. Inside the `viewDidLoad()` method of the `AutoCaptureViewController`, configure the `WKWebView` by creating a `WKWebViewConfiguration` object.
-
-2. Customize the `WKWebViewConfiguration` object as needed. The following settings are required:
-
-    ```swift
-    let webConfiguration = WKWebViewConfiguration()
-    webConfiguration.allowsInlineMediaPlayback = true // Allow camera to play directly within web app
-    webConfiguration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs") // Local fetching of assets
-    webConfiguration.userContentController = configureUserContentController() // Set up a user content controller for handling custom user scripts and communication between the web app and native app code.
-    ```
-
-3. Configure the `WKUserContentController` by adding message handlers and user scripts. This allows communication between the web app and the iOS app.
-
-4. Set the `navigationDelegate` of the `webView` to the current view controller.
-
-## Step 5: Loading the Web App
-
-1. Call the `loadFileURL(_:allowingReadAccessTo:)` method on the `webView` instance to load the web app's HTML file. Pass the appropriate file URL and allow read access to the necessary directories.
-
-2. Implement the delegate method `webView(_:didFinish:)` from the `WKNavigationDelegate` protocol. This method will be called when the web view finishes loading the web app.
-
-3. Inside the `webView(_:didFinish:)` method, evaluate any necessary JavaScript code using `evaluateJavaScript(_:completionHandler:)`. This allows you to interact with the web app from your iOS code.
+WKWebView blocks `fetch()` requests on `file://` URLs. To work around this, register a custom URL scheme handler that serves local files with proper HTTP responses.
 
 ```swift
-extension AutoCaptureViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let script = """
-            window.AC = new AutoCapture();
-            window.AC.init({
-                CONTAINER_ID: 'AC_mount',
-                LANGUAGE: 'en',
-                MRZ: false,
-                ASSETS_MODE: "LOCAL",
-                ASSETS_FOLDER:"\(assetsUrl!)",
-                TOKEN:"\(token!)",
-                onComplete: function (data) {
-                    window.webkit.messageHandlers.output.postMessage(data);
-                    window.AC.stop()
-                },
-                onError: function(error) {
-                    console.log(error)
-                    window.AC.stop();
-                    window.AC.alert(error)
-                },
-                onUserExit: function(error) {
-                    console.log(error);
-                    window.AC.stop();
-                }
-            })
-        """
-        
-        webView.evaluateJavaScript(script, completionHandler: nil)
-    }
-```
+import WebKit
 
-## Step 6: Handling Communication with the Web App
+final class LocalFileSchemeHandler: NSObject, WKURLSchemeHandler {
+    static let customScheme = "localfile"
 
-1. Implement the delegate method `userContentController(_:didReceive:)` from the `WKScriptMessageHandler` protocol. This method is responsible for handling messages sent from the web app.
-
-2. Extract the message body as a dictionary and process the data as needed. You can pass data between the web app and the iOS app using this message handler.
-
-3. Customize the logic inside `userContentController(_:didReceive:)` based on your specific requirements.
-
-```swift
-extension AutoCaptureViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let dict = message.body as? [String: AnyObject] else {
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        guard let url = urlSchemeTask.request.url,
+              let path = url.path.removingPercentEncoding else {
+            urlSchemeTask.didFailWithError(NSError(domain: "LocalFileScheme", code: 404))
             return
         }
-        print(dict)
-        dismiss(animated: true, completion: nil)
+
+        let fileURL = URL(fileURLWithPath: path)
+        do {
+            let data = try Data(contentsOf: fileURL)
+            let mimeType = Self.mimeType(for: fileURL)
+            let response = HTTPURLResponse(
+                url: url, statusCode: 200, httpVersion: "HTTP/1.1",
+                headerFields: ["Content-Type": mimeType, "Content-Length": "\(data.count)"]
+            )!
+            urlSchemeTask.didReceive(response)
+            urlSchemeTask.didReceive(data)
+            urlSchemeTask.didFinish()
+        } catch {
+            urlSchemeTask.didFailWithError(error)
+        }
+    }
+
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {}
+
+    private static func mimeType(for url: URL) -> String {
+        switch url.pathExtension.lowercased() {
+        case "html":        return "text/html"
+        case "js", "mjs":   return "application/javascript"
+        case "css":          return "text/css"
+        case "wasm":         return "application/wasm"
+        case "png":          return "image/png"
+        case "jpg", "jpeg":  return "image/jpeg"
+        case "svg":          return "image/svg+xml"
+        case "json":         return "application/json"
+        default:             return "application/octet-stream"
+        }
     }
 }
 ```
+
+## Step 3: Configure the WebView
+
+```swift
+private func setupWebView() {
+    let cfg = WKWebViewConfiguration()
+
+    // Register custom scheme so fetch() works with local files
+    cfg.setURLSchemeHandler(LocalFileSchemeHandler(), forURLScheme: LocalFileSchemeHandler.customScheme)
+
+    cfg.websiteDataStore = .nonPersistent()
+    cfg.allowsInlineMediaPlayback = true
+    cfg.mediaTypesRequiringUserActionForPlayback = []
+    cfg.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+
+    let ucc = WKUserContentController()
+    ucc.add(self, name: "output")   // Receives SDK callbacks
+    cfg.userContentController = ucc
+
+    webView = WKWebView(frame: view.bounds, configuration: cfg)
+    webView.navigationDelegate = self
+    webView.uiDelegate = self
+    view.addSubview(webView)
+}
+```
+
+## Step 4: Load the SDK
+
+Load `index.html` using the custom scheme instead of `file://`:
+
+```swift
+private func loadIndex() {
+    guard let indexURL = Bundle.main.url(
+        forResource: "index", withExtension: "html",
+        subdirectory: "YourDistFolder/dist"
+    ) else { return }
+
+    // Convert file:// to localfile:// so the scheme handler serves it
+    var components = URLComponents(url: indexURL, resolvingAgainstBaseURL: false)!
+    components.scheme = LocalFileSchemeHandler.customScheme
+
+    guard let customURL = components.url else { return }
+    webView.load(URLRequest(url: customURL))
+}
+```
+
+## Step 5: Initialize the SDK
+
+After the page loads, inject the initialization script:
+
+```swift
+func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    guard let distURL = webView.url?.deletingLastPathComponent() else { return }
+    let assetsURL = distURL.appendingPathComponent("assets").absoluteString
+
+    let script = """
+    (function() {
+        var mount = document.getElementById('AC_mount');
+        if (!mount) {
+            mount = document.createElement('div');
+            mount.id = 'AC_mount';
+            document.body.appendChild(mount);
+        }
+
+        var ac = new AutoCapture();
+        ac.init({
+            CONTAINER_ID: 'AC_mount',
+            LANGUAGE: 'en',
+            TOKEN: '\(token)',
+            ASSETS_MODE: 'LOCAL',
+            ASSETS_FOLDER: '\(assetsURL)',
+            onComplete: function(data) {
+                window.webkit.messageHandlers.output.postMessage({
+                    type: 'complete', data: data
+                });
+            },
+            onError: function(error) {
+                // v7: error is { code, stack }
+                window.webkit.messageHandlers.output.postMessage({
+                    type: 'error',
+                    code: error.code,
+                    stack: error.stack
+                });
+            },
+            onUserExit: function() {
+                window.webkit.messageHandlers.output.postMessage({
+                    type: 'cancel'
+                });
+            }
+        });
+    })();
+    """
+
+    webView.evaluateJavaScript(script, completionHandler: nil)
+}
+```
+
+## Step 6: Handle SDK Callbacks
+
+```swift
+func userContentController(
+    _ userContentController: WKUserContentController,
+    didReceive message: WKScriptMessage
+) {
+    guard let dict = message.body as? [String: Any],
+          let type = dict["type"] as? String else { return }
+
+    switch type {
+    case "complete":
+        let payload = dict["data"]
+        // Process captured images — see JS docs for output format
+        dismiss(animated: true)
+    case "error":
+        let code = dict["code"] as? String ?? "unknown"
+        let stack = dict["stack"] as? String ?? ""
+        print("SDK error: \(code)\n\(stack)")
+    case "cancel":
+        dismiss(animated: true)
+    default:
+        break
+    }
+}
+```
+
+## Step 7: Grant Camera Permissions (iOS 15+)
+
+Implement `WKUIDelegate` to auto-grant camera access for local content:
+
+```swift
+@available(iOS 15.0, *)
+func webView(
+    _ webView: WKWebView,
+    requestMediaCapturePermissionFor origin: WKSecurityOrigin,
+    initiatedByFrame frame: WKFrameInfo,
+    type: WKMediaCaptureType,
+    decisionHandler: @escaping (WKPermissionDecision) -> Void
+) {
+    let scheme = frame.request.url?.scheme?.lowercased() ?? ""
+    let isLocal = (scheme == "file") || (scheme == LocalFileSchemeHandler.customScheme)
+    decisionHandler(isLocal ? .grant : .prompt)
+}
+```
+
+Also add to `Info.plist`:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Camera access is needed to capture your document.</string>
+```
+
+## Troubleshooting
+
+| Symptom                         | Cause                              | Fix                                   |
+| ------------------------------- | ---------------------------------- | ------------------------------------- |
+| "Failed to fetch worker script" | `fetch()` blocked on `file://`     | Use `LocalFileSchemeHandler` (Step 2) |
+| White screen, no camera prompt  | Missing `WKUIDelegate`             | Implement Step 7                      |
+| Camera denied silently          | Missing `NSCameraUsageDescription` | Add to Info.plist                     |
+| SDK loads but no assets         | Wrong `ASSETS_FOLDER` path         | Check the URL ends with `/assets/`    |

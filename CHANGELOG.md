@@ -1,5 +1,13 @@
 # *CHANGELOG*
 
+## *CHANGES* v7.0.0 ⚠️ BREAKING CHANGE
+
+- **Structured Error Codes (Breaking)**: `onError` now receives an object `{ code, stack }` instead of a plain string. The `code` follows the format `category:NNNN` (e.g., `capture_error:4004`). Include both `code` and `stack` when reporting issues to support. See [Error Codes](README.md#error-codes) for the full list of categories and recommended actions. See [Migration Guide v7](docs/migration_guide_v7.md) for upgrade instructions.
+- **Improved Stability**: Fixed multiple crashes related to exit timing, external DOM removal, camera stream interruption, and component loading failures. All errors are now reported through `onError` with structured error codes instead of crashing silently. Language load failures now correctly surface as `settings_error:2004`. Token verification failures now include a more detailed stack trace in `error.stack`.
+- **Resource Cleanup**: Camera streams are now fully released on error, and lingering timers are properly cancelled when the SDK stops. This prevents resource buildup in single-page applications where the SDK is initialized multiple times.
+- **New Language Keys**: Added 5 new keys for error message categories: `init_error`, `settings_error`, `token_error`, `opencv_error`, `model_error`. Custom language files should add these keys to provide translated error messages; the SDK falls back to English defaults if they are missing.
+- **OpenCV reduced**: Reduced OpenCV build size from 10.1 MB to 2.4 MB, resulting in faster load times and lower memory usage.
+
 ## *CHANGES* v6.1.1
 
 - **Alert Stability**: Improved alert handling, repeated alerts no longer flicker, and critical errors stay visible until the user exits or refreshes.

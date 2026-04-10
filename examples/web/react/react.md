@@ -37,7 +37,8 @@ const AutoCaptureComponent = () => {
           console.log(data);
         },
         onError: function(error) {
-          console.log(error)
+          // v7: error is { code, stack }
+          console.log(error.code, error.stack);
         },
         onUserExit: function(error) {
           console.log(error);
@@ -72,12 +73,13 @@ declare module '@datachecker/autocapture' {
     additional_document_type?: string;
   };
 
+type AllowedDocumentSides = Array<'FRONT' | 'BACK'>;
 type AllowedDocuments = {
-    ID: Array<'FRONT' | 'BACK'>;
-    PASSPORT: Array<'FRONT' | 'BACK'>;
-    DUTCH_PASSPORT?: undefined;
-    RESIDENCE_PERMIT: Array<'FRONT' | 'BACK'>;
-    DRIVING_LICENSE: Array<'FRONT' | 'BACK'>;
+    IDENTITY_CARD?: AllowedDocumentSides;
+    PASSPORT?: AllowedDocumentSides;
+    DUTCH_PASSPORT?: AllowedDocumentSides;
+    RESIDENCE_PERMIT?: AllowedDocumentSides;
+    DRIVING_LICENSE?: AllowedDocumentSides;
 };
 
   interface AutoCaptureConfig {
@@ -86,15 +88,24 @@ type AllowedDocuments = {
     TOKEN: string;
     ASSETS_MODE?: 'CDN' | 'LOCAL';
     ASSETS_FOLDER?: string;
-    onComplete?: (data: AutocaptureResponse) => void;
-    onError?: (error: Error) => void;
-    onUserExit?: (error: Error) => void;
+    ALLOWED_DOCUMENTS?: AllowedDocuments;
+    APPROVAL?: boolean;
+    DEBUG?: boolean;
+    DESKTOP_MODE?: boolean;
+    BACKGROUND_COLOR?: string;
+    ROI_MODE?: 'portrait-landscape' | 'landscape-landscape';
+    SDK_MODE?: 'autocapture' | 'papercapture';
+    CAPTURE_BTN_AFTER?: number;
+    onComplete: (data: AutocaptureResponse) => void;
+    onError: (error: { code: string; stack: string }) => void;
+    onUserExit: (error: string) => void;
   }
 
   class AutoCapture {
     constructor();
-    init(config: AutoCaptureConfig): void;
+    init(config: AutoCaptureConfig): Promise<void>;
     stop(): void;
+    remove(): void;
   }
 
   export default AutoCapture;

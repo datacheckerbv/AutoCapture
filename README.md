@@ -94,13 +94,13 @@ To run this tool, you will need initialise with the following variables.
 | `ASSETS_MODE`       | string                  | `"CDN"`                                     | `"LOCAL"`                                   | **optional**<br> Specifies mode of asset fetching, either through CDN or locally hosted assets. (see [Asset Fetching Configuration](#asset-fetching-configuration))                                                                                                                                                                                                                                                                                                                                                                              |
 | `BACKGROUND_COLOR`  | string (Hex color code) | `"#1d3461"`                                 | `"#1d3461"`                                 | **optional**<br> Specifies the background color using a hex color code.                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | `CAPTURE_BTN_AFTER` | int                     | `0` (AutoCapture) / `5000` (PaperCapture)   | `0`                                         | **optional**<br> Configures a delay (in milliseconds) after which an instructional dialog and manual capture button appear. Setting to `0` disables the feature. When enabled, users can manually trigger capture at their convenience while auto-capture remains active. The dialog appears once per session.                                                                                                                                                                                                                                   |
-| `CONTAINER_ID`      | string                  |                                             | `"AC_mount"`                                | **required**<br> _div id_ to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `CONTAINER_ID`      | string                  |                                             | `"AC_mount"`                                | **required**<br> *div id* to mount tool on. If the `div` does not exist it will be created and placed in `<body>`.                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `DEBUG`             | bool                    | `false`                                     | `false`                                     | **optional**<br> When debug is `true` more detailed logs will be visible.                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `DESKTOP_MODE`      | bool                    | `false`                                     | `false`                                     | **optional**<br> Enables all cameras for testing/development purposes. **FOR TESTING ONLY - DO NOT USE IN PRODUCTION.** Desktop cameras are often labeled with `facingMode: 'user'` instead of `'environment'`, which would normally be filtered out. This mode bypasses camera filtering to allow testing on desktop devices, including virtual cameras. Production environments should always use `false` to ensure only back-facing cameras (environment) are available, preventing accidental use of front-facing cameras on mobile devices. |
 | `LANGUAGE`          | string                  | `"nl"`                                      | `"nl"`                                      | **required**<br> Notifications in specific language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `onComplete`        | javascript function     |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback function on _complete_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `onError`           | javascript function     | `function(error) {console.log(error)}`      | `function(error) {console.log(error)}`      | **required**<br> Callback function on _error_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback function on _user exit_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `onComplete`        | javascript function     |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback function on *complete*.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `onError`           | javascript function     | `function(error) {console.log(error.code)}` | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, stack }`. See [Error Codes](#error-codes).                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `onUserExit`        | javascript function     | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback function on *user exit*.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `ROI_MODE`          | string                  | `"landscape-landscape"`                     | `portrait-landscape`                        | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `SDK_MODE`          | string                  | `"autocapture"`                             | `"papercapture"`                            | **optional**<br> Specifies mode of the SDK, supported modes are: `"autocapture"`, `"papercapture"` (see [SDK Modes](#sdk-modes))                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `TOKEN`             | string                  |                                             | see [SDK Token](#sdk-token)                 | **required**<br> Datachecker SDK token.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
@@ -207,7 +207,7 @@ AC.init({
         console.log(data);
     },
     onError: function(error) {
-        console.log(error)
+        console.error(error.code, error.stack)
     },
     onUserExit: function(error) {
         console.log(error);
@@ -216,11 +216,11 @@ AC.init({
 });
 ```
 
-| **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                      | **EXAMPLE**                               | **NOTES**                                                                                            |
-| ------------- | ------------------- | -------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `onComplete`  | javascript function |                                        | `function(data) {console.log(data)}`      | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed. |
-| `onError`     | javascript function | `function(error) {console.log(error)}` | `function(error) {console.log(error)}`    | **required**<br> Callback that fires when an _error_ occurs.                                         |
-| `onUserExit`  | javascript function | `function(error) {console.log(error)}` | `function(error) {window.history.back()}` | **required**<br> Callback that fires when the user exits the flow without completing it.             |
+| **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                           | **EXAMPLE**                                 | **NOTES**                                                                                                               |
+| ------------- | ------------------- | ------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `onComplete`  | javascript function |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                    |
+| `onError`     | javascript function | `function(error) {console.log(error.code)}` | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, stack }`. See [Error Codes](#error-codes). |
+| `onUserExit`  | javascript function | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback that fires when the user exits the flow without completing it.                                |
 
 ### onComplete
 
@@ -242,18 +242,27 @@ AC.init({
 
 ### onError
 
-This callback can be used to alert users when something goes wrong during the process. This callback function is **required**. The `error` parameter within the function contains information about the specific error encountered, allowing you to log or display error messages for debugging or user guidance. The errors that are thrown are either known or unknown. The known errors can be found within the [Languages](#languages) dictionary. On the other hand, the unknown errors will be thrown as is.  
+This callback fires when an error occurs during the SDK lifecycle. This callback function is **required**. The `error` parameter is an object with two properties:
+
+- **`code`** — A structured error code (e.g., `capture_error:4004`). Use the category prefix to determine the appropriate UI response. See [Error Codes](#error-codes) for the full list of categories.
+- **`stack`** — A stack trace string. Include this when reporting issues to support for faster diagnosis.
 
 Example Web (JS):
-
-Within the example below we are logging the output (`error`) to console.
 
 ```javascript
 let AC = new AutoCapture();
 AC.init({
     ...,
     onError: function(error) {
-        console.log(error)
+        console.error(error.code, error.stack);
+
+        if (error.code.startsWith('capture_error')) {
+            // Camera issue — show retry UI or prompt for camera permission
+        } else if (error.code.startsWith('init_error')) {
+            // Initialization failed — prompt user to refresh the page
+        } else if (error.code.startsWith('not_allowed')) {
+            // Document type not permitted — prompt user to use a different document
+        }
     }
 });
 ```
@@ -318,7 +327,7 @@ AC.init({
         console.log(data);
     },
     onError: function(error) {
-        console.log(error)
+        console.error(error.code, error.stack)
     },
     onUserExit: function(error) {
         console.log(error);
@@ -379,7 +388,7 @@ let AutoCapture = require('@datachecker/autocapture')
             console.log(data)
         },
         onError: function(error) {
-            console.log(error)
+            console.error(error.code, error.stack);
         },
         onUserExit: function(error) {
             console.log(error);
@@ -430,14 +439,19 @@ var LANGUAGE = {
     flip_frontside: "Flip the document to the frontside",
     focus: "Hold still...",
     glare: "Glare detected",
+    init_error: "Initialization failed. Please refresh the page.",
     manual_mode: "Manual capture mode. Press Capture when ready.",
+    model_error: "Failed to load required resources. Please check your connection.",
     not_allowed: "Document type not allowed. Please use a different document.",
     occlusion: "Document is occluded",
+    opencv_error: "A required component failed to load. Please refresh the page.",
+    settings_error: "Configuration error. Please contact support.",
     size: "Move closer",
     start_prompt: "Tap to start",
     std_msg_0: "Place your document",
     retry: "Try again",
     rotate_phone: "Please rotate your phone upright",
+    token_error: "Authorization failed. Please try again later.",
     tutorial: "Follow the instructions"
 }
 ```
@@ -464,19 +478,42 @@ AC.init({
             flip_frontside: "Flip the document to the frontside",
             focus: "Hold still...",
             glare: "Glare detected",
+            init_error: "Initialization failed. Please refresh the page.",
             manual_mode: "Manual capture mode. Press Capture when ready.",
+            model_error: "Failed to load required resources. Please check your connection.",
             not_allowed: "Document type not allowed. Please use a different document.",
             occlusion: "Document is occluded",
+            opencv_error: "A required component failed to load. Please refresh the page.",
+            settings_error: "Configuration error. Please contact support.",
             size: "Move closer",
             start_prompt: "Tap to start",
             std_msg_0: "Place your document",
             retry: "Try again",
             rotate_phone: "Please rotate your phone upright",
+            token_error: "Authorization failed. Please try again later.",
             tutorial: "Follow the instructions"
         }
     ),
     ...
 ```
+
+## Error Codes
+
+The `onError` callback receives an object `{ code, stack }`. The `code` follows the format `category:NNNN` (e.g., `capture_error:4004`). Use the category prefix to determine the type of error and the appropriate response.
+
+| Category         | Description                               | Recommended Action                                |
+| ---------------- | ----------------------------------------- | ------------------------------------------------- |
+| `capture_error`  | Camera or processing failure              | Show camera retry UI or prompt for permission     |
+| `init_error`     | Initialization failed                     | Prompt user to refresh the page                   |
+| `model_error`    | ML model failed to load                   | Check network connection, retry initialization    |
+| `not_allowed`    | Document type not permitted               | Prompt user to use an accepted document type      |
+| `opencv_error`   | Required component failed to load         | Prompt user to refresh or try a different browser |
+| `settings_error` | Invalid configuration or version mismatch | Verify SDK configuration and assets               |
+| `token_error`    | Token missing, invalid, or not permitted  | Verify token credentials                          |
+
+When reporting issues to support, include both `error.code` and `error.stack` — the numeric identifier in the code and the stack trace allow for precise diagnosis.
+
+The user-facing alert message shown in the SDK overlay is determined by the category prefix, which maps to a key in the [Languages](#languages) dictionary (e.g., `capture_error` maps to the `capture_error` language key). If a custom language file does not include a key for a new category (e.g., `init_error`), the SDK falls back to its built-in English default.
 
 ## Models
 
@@ -511,7 +548,7 @@ AC.init({
         console.log(data)
     },
     onError: function(error) {
-        console.log(error)
+        console.error(error.code, error.stack)
     },
     onUserExit: function (error) {
         console.log(error)
@@ -535,7 +572,7 @@ ALLOWED_DOCUMENTS: {
 
 The system may detect an unknown document type when it cannot confidently classify the document. This is represented by the `'UNK'` (unknown) key for both document type and page ID.
 
-**Important**: Unknown documents cannot be added to the `ALLOWED_DOCUMENTS` configuration as `'UNK'` is not a valid document type in the settings validation. When an unknown document is detected, it will automatically trigger the `onError` callback (see [onError](#onerror)) with the error message `"Document type not in allowed documents"`. This is the intended behavior to ensure only recognized and valid document types are processed by the SDK.
+**Important**: Unknown documents cannot be added to the `ALLOWED_DOCUMENTS` configuration as `'UNK'` is not a valid document type in the settings validation. When an unknown document is detected, it will automatically trigger the `onError` callback (see [onError](#onerror)) with a `not_allowed` error code. This is the intended behavior to ensure only recognized and valid document types are processed by the SDK.
 
 ## Output
 
