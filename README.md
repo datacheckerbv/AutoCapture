@@ -1,5 +1,7 @@
 # AutoCapture
 
+> **📢 Upgrading from older versions?** See the [Migration Guides](docs/README.md#migration-guides) for breaking changes.
+
 This project contains Datachecker's AutoCapture tool, that captures images of paper documents + identity documents (ID/Passport/Driver license). The tool only takes a capture once a document is detected and it passes the quality control.
 
 The tool will be run in the browser and is therefore written in JavaScript.
