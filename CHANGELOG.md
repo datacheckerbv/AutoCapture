@@ -1,5 +1,14 @@
 # *CHANGELOG*
 
+## *CHANGES* v7.1.0
+
+- **Enhanced detection model**: The detection model has been upgraded to improve accuracy and performance, with improved glare detection and added support for vertical documents:
+  - Netherlands Residence Permit 2026
+  - Cameroon ID Card 2025
+  - Iceland ID Card 2024
+  - French ID Card 2014
+- **Bug Fix**: Fixed incorrect animations displayed during Identity Card capture.
+
 ## *CHANGES* v7.0.1
 
 - **Bug Fix**: Fixed a double-capture issue on desktop where `onComplete` could fire twice due to overlapping frame processing after a tab visibility change.
