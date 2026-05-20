@@ -1,5 +1,14 @@
 # *CHANGELOG*
 
+## *CHANGES* v7.2.2
+
+- **Updated automation pipeline**: Updated the pipeline for publishing the package to NPM.
+
+## *CHANGES* v7.2.1
+
+- **Faster on Android**: Substantially improved frame processing speed on Android devices by reducing redundant pixel work in the capture pipeline.
+- **More Reliable Focus Detection**: Final capture now requires a short streak of consecutive in-focus frames rather than a single one, preventing the rare case where two coincidentally similar blurry frames could pass the focus check.
+
 ## *CHANGES* v7.2.0
 
 - **Richer `onError` Payload**: `onError` now receives `{ code, stack, message, chain }`. `message` and `chain` are new optional fields — the existing `code` and `stack` are unchanged so current integrations continue to work without modification.
