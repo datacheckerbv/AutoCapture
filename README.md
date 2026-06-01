@@ -402,17 +402,36 @@ let AutoCapture = require('@datachecker/autocapture')
 </html>
 ```
 
-For comphrehensive integration examples, please refer to our [Integration Examples](examples/README.md).
+For comprehensive integration examples, please refer to our [Integration Examples](examples/README.md).
 
 ## Languages
 
-There are two ways in which notifications can be loaded: from file, from object (json).
+Notifications can be loaded in two ways: from a language file or from a JSON object.
 
-### File
+### Loading from a file
 
-The languages can be found in `assets/language/`. The current support languages are `en` and `nl`. More languages could be created.
+Language files are located in `assets/language/`. The currently supported languages are:
 
-The notifications can be loaded in `configuration` like the following:
+- Bulgarian (bg)
+- Czech (cz)
+- German (de)
+- English (en)
+- Spanish (es)
+- French (fr)
+- Hungarian (hu)
+- Italian (it)
+- Lithuanian (lt)
+- Dutch (nl)
+- Papiamento (pa)
+- Polish (pl)
+- Portuguese (pt)
+- Romanian (ro)
+- Slovak (sk)
+- Ukrainian (uk)
+
+Additional languages can be added if needed.
+
+You can load a language in the `configuration` by setting the `LANGUAGE` option:
 
 ```javascript
 let AC = new AutoCapture();
@@ -442,7 +461,7 @@ var LANGUAGE = {
     focus: "Hold still...",
     glare: "Glare detected",
     init_error: "Initialization failed. Please refresh the page.",
-    manual_mode: "Manual capture mode. Press Capture when ready.",
+    manual_mode: "Manual capture mode. Tap the button when ready.",
     model_error: "Failed to load required resources. Please check your connection.",
     not_allowed: "Document type not allowed. Please use a different document.",
     occlusion: "Document is occluded",
@@ -481,7 +500,7 @@ AC.init({
             focus: "Hold still...",
             glare: "Glare detected",
             init_error: "Initialization failed. Please refresh the page.",
-            manual_mode: "Manual capture mode. Press Capture when ready.",
+            manual_mode: "Manual capture mode. Tap the button when ready.",
             model_error: "Failed to load required resources. Please check your connection.",
             not_allowed: "Document type not allowed. Please use a different document.",
             occlusion: "Document is occluded",

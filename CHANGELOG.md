@@ -1,5 +1,29 @@
 # *CHANGELOG*
 
+## *CHANGES* v7.2.3
+
+- **Faster on Android**: Android Chrome now reads camera frames via the WebCodecs API and runs a lighter movement check, reducing per-frame overhead and improving capture frame rate. iOS and older Android continue to work unchanged.
+- **More Consistent Capture Performance**: Eliminated intermittent slow-frame spikes that could briefly stall capture, by reducing per-frame memory allocations in the processing pipeline. PaperCapture mode in particular runs noticeably more consistently.
+- **Sharper Captures on Modern Browsers**: On browsers that support the ImageCapture API (Chromium-based, e.g. Android Chrome), the live preview now streams at a lighter resolution for smoother, lower-overhead processing while the final document image is captured at the camera's full photo resolution. iOS Safari and older Android stream at high resolution as before, so saved-image quality is preserved everywhere.
+- **Smoother Animations**: The capture checkmark, tutorial prompts, and document-flip animations have been reworked to play reliably across devices. The checkmark in particular now plays its full animation even on devices with system-level "Remove animations" settings enabled.
+- **Bug Fix — Focus Check After Re-acquisition**: After the SDK briefly loses sight of a document (for example, when it moves out of the frame), the focus check now correctly re-baselines when the document is found again, preventing rare cases where users could get stuck in a re-check loop.
+- **Bug Fix — Unintended Page Scroll**: Fixed an issue where the SDK's mount container could be scrolled vertically on mobile and desktop, allowing users to drag past the capture UI. The SDK now reliably fills the viewport without exposing a scrollable area.
+- **Support for new languages**: (see [Languages](README.md#languages))
+  - Bulgarian (bg)
+  - Czech (cz)
+  - German (de)
+  - Spanish (es)
+  - French (fr)
+  - Hungarian (hu)
+  - Italian (it)
+  - Lithuanian (lt)
+  - Papiamento (pa)
+  - Polish (pl)
+  - Portuguese (pt)
+  - Romanian (ro)
+  - Slovak (sk)
+  - Ukrainian (uk)
+
 ## *CHANGES* v7.2.2
 
 - **Updated automation pipeline**: Updated the pipeline for publishing the package to NPM.

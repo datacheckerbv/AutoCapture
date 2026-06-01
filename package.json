@@ -1,6 +1,6 @@
 {
   "name": "@datachecker/autocapture",
-  "version": "v7.2.2",
+  "version": "v7.2.3",
   "description": "This project contains Datachecker's AutoCapture tool, that captures images of identity documents (ID/Passport/Driver license). The tool only takes a capture once a document is detected and it passes the quality control.",
   "main": "dist/autocapture.obf.js",
   "directories": {
@@ -12,6 +12,7 @@
     "start-server": "http-server -p 3000",
     "cypress:open": "cypress open --project tests/integration",
     "cypress:run": "cypress run --project tests/integration",
+    "pretest:e2e": "npm run build",
     "test:e2e": "npm run start-server & npm run cypress:run",
     "test:e2e:open": "npm run start-server & npm run cypress:open",
     "test:smoke": "cypress run --project tests/integration --spec 'tests/integration/cypress/e2e/smoke.cy.js'",
