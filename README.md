@@ -466,6 +466,7 @@ var LANGUAGE = {
     not_allowed: "Document type not allowed. Please use a different document.",
     occlusion: "Document is occluded",
     opencv_error: "A required component failed to load. Please refresh the page.",
+    runtime_error: "Something went wrong. Please try again.",
     settings_error: "Configuration error. Please contact support.",
     size: "Move closer",
     start_prompt: "Tap to start",
@@ -505,6 +506,7 @@ AC.init({
             not_allowed: "Document type not allowed. Please use a different document.",
             occlusion: "Document is occluded",
             opencv_error: "A required component failed to load. Please refresh the page.",
+            runtime_error: "Something went wrong. Please try again.",
             settings_error: "Configuration error. Please contact support.",
             size: "Move closer",
             start_prompt: "Tap to start",
@@ -524,11 +526,12 @@ The `onError` callback receives an object `{ code, stack }`. The `code` follows 
 
 | Category         | Description                               | Recommended Action                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------------- |
-| `capture_error`  | Camera or processing failure              | Show camera retry UI or prompt for permission     |
+| `capture_error`  | Camera failure                            | Show camera retry UI or prompt for permission     |
 | `init_error`     | Initialization failed                     | Prompt user to refresh the page                   |
 | `model_error`    | ML model failed to load                   | Check network connection, retry initialization    |
 | `not_allowed`    | Document type not permitted               | Prompt user to use an accepted document type      |
 | `opencv_error`   | Required component failed to load         | Prompt user to refresh or try a different browser |
+| `runtime_error`  | Unexpected/generic runtime error          | Show generic retry UI                             |
 | `settings_error` | Invalid configuration or version mismatch | Verify SDK configuration and assets               |
 | `token_error`    | Token missing, invalid, or not permitted  | Verify token credentials                          |
 

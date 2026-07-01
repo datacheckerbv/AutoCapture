@@ -1,5 +1,19 @@
 # *CHANGELOG*
 
+## *CHANGES* v8.0.0
+
+### ⚠️ Breaking Changes
+
+- **Generic runtime errors recategorised**: The generic runtime catch-all error (`PROCESSING_ERROR`) moved from `capture_error:4001` to its own category `runtime_error:8001`. Previously a generic runtime failure was reported under `capture_error` and showed the camera-specific overlay message; it now has a dedicated `runtime_error` category and a generic message. The `capture_error` category is now camera-only. The number `4001` is retired and will not be reused. **Action required:** if your `onError` handler matches the exact string `capture_error:4001`, switch it to `runtime_error:8001`; if it routes generic runtime errors via the `capture_error` prefix, note that they now arrive under `runtime_error`. See [Error Codes](README.md#error-codes) and the [v8 Migration Guide](docs/migration_guide_v8.md).
+
+### Changes
+
+- **New `runtime_error` overlay message (custom languages)**: The new `runtime_error` error category has its own user-facing overlay message, which is included in all languages bundled with the SDK. If you provide your own custom `LANGUAGE` object, add a `runtime_error` entry for a localized message; without it the SDK falls back to the English default ("Something went wrong. Please try again."), so this is recommended but not required. See the [v8 Migration Guide](docs/migration_guide_v8.md).
+- **Manual Capture Bypasses Validation Checks**: When the user manually triggers a capture (force capture / capture button), the SDK now bypasses the allowed-document-type (`ALLOWED_DOCUMENTS`) restriction and the environment/exposure and focus quality checks, so a manually requested capture is accepted even when auto-detection is unsure. Document flipping follows the `ALLOWED_DOCUMENTS` configuration: if any allowed document type is two-sided, a manual capture expects two images (front, then a flip), while if every allowed type is single-sided it completes in one image (a document already flipped is not asked again).
+- **Improved Capture Stability (Bug Fix)**: Resolved two rare conditions that could end a capture session prematurely with an error. One occurred during startup before motion detection was fully ready, and one was caused by a transient camera-frame read failure on some browsers. Both are now recovered from automatically, so capture continues uninterrupted.
+- **Black Frame / False "Too Dark" on Some Android Devices (Bug Fix)**: On the high-performance capture path, certain devices (for example Samsung Galaxy S24 and S25) deliver camera frames in a YUV pixel format (I420) that the SDK did not decode. The result was an all-black frame that was wrongly rejected as "Environment is too dark", so capture could never start even in good lighting. The SDK now decodes I420 (and NV21) frames correctly. As a broader safeguard against device and browser variation, any camera pixel format the fast path does not recognise now automatically falls back to the format-agnostic capture path instead of failing, so an unexpected format degrades to a slower-but-working capture rather than a blocked session.
+- **Deterministic Camera Selection**: When more than one eligible camera is available (back-facing/environment with continuous auto-focus), the SDK now sorts the cameras by label before picking the first one, then opens it at the requested ideal 4K resolution. This makes the chosen camera consistent across sessions and devices instead of depending on the browser's enumeration order.
+
 ## *CHANGES* v7.2.3
 
 - **Faster on Android**: Android Chrome now reads camera frames via the WebCodecs API and runs a lighter movement check, reducing per-frame overhead and improving capture frame rate. iOS and older Android continue to work unchanged.
