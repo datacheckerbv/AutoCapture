@@ -1,5 +1,17 @@
 # *CHANGELOG*
 
+## *CHANGES* v9.0.0
+
+### ⚠️ Breaking Changes
+
+- **Unrecognised documents no longer blocked or reported as an error**: The SDK no longer shows a "document not allowed" screen or raises a `not_allowed` error for a document that does not match `ALLOWED_DOCUMENTS`. Document-type rejection moves server-side to DataChecker's document classification service, which validates the captured document during processing. **Action required:** if your `onError` handler treats `not_allowed` as a document rejection, remove that branch; it no longer fires. See the [v9 Migration Guide](docs/migration_guide_v9.md).
+- **Manual capture button on by default**: `CAPTURE_BTN_AFTER` now defaults to `10000` ms (was off), so the button appears 10 seconds after start if no capture has completed. **Action required:** set `CAPTURE_BTN_AFTER: 0` to keep it hidden. See the [v9 Migration Guide](docs/migration_guide_v9.md).
+
+### Changes
+
+- **Lenient document capture**: AutoCapture now steers instead of blocking. A confidently recognised, requested document (and the requested side, if specified) auto-captures as before; anything else is captured manually with a flip prompt. Document-type rejection is not removed, it moves server-side to DataChecker's document classification service, which keeps the SDK resilient to new and updated documents without an SDK update.
+- **Removed the unused `not_allowed` message**: The "document not allowed" overlay message has been removed from the SDK and all bundled languages, since it is no longer shown. If you provide your own `LANGUAGE` object, a `not_allowed` entry in it is now unused (harmless to leave, safe to remove). See the [v9 Migration Guide](docs/migration_guide_v9.md#custom-language-files).
+
 ## *CHANGES* v8.0.0
 
 ### ⚠️ Breaking Changes
