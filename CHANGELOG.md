@@ -1,5 +1,11 @@
 # *CHANGELOG*
 
+## *CHANGES* v9.1.0
+
+### Changes
+
+- **Custom footer logo (white-label)**: You can now replace the DataChecker logo shown in the footer with your own, using the new `LOGO` setting. Point it at an image URL or an inline image, or hide the logo entirely. When you do not set it, the default DataChecker logo is shown as before. (See [Configuration](README.md#configuration) table for details.)
+
 ## *CHANGES* v9.0.0
 
 ### ⚠️ Breaking Changes
