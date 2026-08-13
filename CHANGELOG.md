@@ -1,5 +1,11 @@
 # *CHANGELOG*
 
+## *CHANGES* v9.2.0
+
+### Changes
+
+- **Camera preview no longer appears undersized on iOS 27 (Bug Fix)**: On iOS 27, currently in public and developer beta, the preview could be drawn smaller than the area reserved for it, righting itself only if the user zoomed or switched camera. The area was always sized correctly, so captured images were never affected, only what the user saw. The preview is now redrawn as the camera opens, while the loading indicator is still shown, and again whenever the camera changes its frame size afterwards.
+
 ## *CHANGES* v9.1.0
 
 ### Changes
