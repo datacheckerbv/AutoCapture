@@ -29,6 +29,41 @@ The SDK requires a browser that supports at least ECMAScript 12 (ES12). It is hi
 
 Using the latest browser versions will ensure that all modern JavaScript features required by the SDK are supported.
 
+### Minimum requirements
+
+The SDK runs its image processing, document detection, glare classification and face detection in WebAssembly, and requires **WebAssembly SIMD**: the bundled OpenCV build is compiled for it, and the ONNX Runtime the detection models run on ships SIMD-only. There is no fallback for a device that lacks either: the SDK refuses to start rather than degrading.
+
+| Requirement       | Minimum version                                        |
+| ----------------- | ------------------------------------------------------ |
+| iOS / iPadOS      | **16.4** (all iOS browsers use WebKit, so this applies regardless of browser) |
+| Safari on macOS   | 16.4                                                   |
+| Chrome / Edge     | 91                                                     |
+| Firefox           | 89                                                     |
+| Android           | Chrome 91 + / Samsung Internet 16 + (the **browser** version matters, not the Android version) |
+
+Devices below these versions are refused with a `device_error` before the camera opens. See [Unsupported devices](#unsupported-devices).
+
+**iOS and Android fail differently, and the message you show should differ too.**
+
+- **On iOS, the browser is the operating system.** Every iOS browser uses WebKit, so WebAssembly SIMD arrives with iOS 16.4 and cannot be obtained any sooner. Installing a different browser changes nothing. For hardware that cannot go past iOS 15 (iPhone 7 and older, still receiving 15.8.x security updates) this is permanent: no update will ever make the SDK work. "Update iOS, or use a different device" is the only honest message.
+- **On Android, the browser updates independently of the operating system.** Chrome and the Android System WebView update through the Play Store, so a phone on an old Android release usually still runs a current browser with SIMD. A 2016 handset that keeps receiving Chrome updates works fine. When Android does fail it is normally the *browser* that is stale, not the OS: most often on devices without Play Store access (some Huawei models, AOSP or regional builds), or an in-app browser sitting on an outdated System WebView. Here "update your browser, or open the link in Chrome" is usually actionable.
+- **WebAssembly can be switched off on an otherwise-current device.** iOS Lockdown Mode disables it, as do some managed-browser policies. These report `7002` rather than `7003`, so you can tell them apart from old hardware. Unlike old hardware, the user can often fix it.
+
+### Unsupported devices
+
+A device that cannot run the SDK is refused on the `onError` callback **before** the camera opens. Both codes share the `device_error` category, so the simplest integration branches on the prefix; the individual codes let you tailor the message.
+
+| Code                | Meaning                              | What to tell the user                                     |
+| ------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `device_error:7002` | No WebAssembly at all                | Usually a restricted browser mode. On iOS, check whether Lockdown Mode is on |
+| `device_error:7003` | WebAssembly present but without SIMD | On iOS: update to 16.4 or later, otherwise the device is too old. On Android: update the browser, or open the link in Chrome |
+
+**Do not offer a retry for either.** Nothing about the device changes between attempts. Recovery, where it exists, needs an action outside the page: an OS update, a browser update, or turning off Lockdown Mode.
+
+`7002` is the one case that may be user-fixable on current hardware, since Lockdown Mode and browser policies can be turned off. That is why it is reported separately rather than folded into `7003`.
+
+These codes match the FaceVerify SDK, so an integration embedding both can share one handler.
+
 ## Steps
 
 1. Request [OAUTH Token](#oauth-token)
@@ -102,7 +137,7 @@ To run this tool, you will need initialise with the following variables.
 | `LANGUAGE`          | string                  | `"nl"`                                        | `"nl"`                                      | **required**<br> Notifications in specific language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `LOGO`              | string / null           | (embedded DataChecker logo)                   | `"https://example.com/logo.png"`            | **optional**<br> White-label the footer logo. Provide an `https:` image URL, a relative path to a self-hosted image (e.g. `"assets/logo.png"`, resolved against your page), or an inline `data:image/...` URI, to show your own logo instead of the default DataChecker logo. Any web image format is accepted (PNG, JPG, WEBP, SVG, ...); the logo is rendered as an `<img>`, so an SVG file, URL, or `data:image/svg+xml` URI works like any other. Set to `null` to hide the footer logo entirely. Leave unset to keep the default. Unsafe values (`http:`, `javascript:`, protocol-relative `//host`, non-image `data:`) are ignored and the default is used. The logo is scaled to fit the footer, so a wide logo (similar to the default's proportions) displays best. |
 | `onComplete`        | javascript function     |                                               | `function(data) {console.log(data)}`        | **required**<br> Callback function on _complete_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `onError`           | javascript function     | `function(error) {console.log(error.code)}`   | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, stack }`. See [Error Codes](#error-codes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `onError`           | javascript function     | `function(error) {console.log(error.code)}`   | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, message, stack, chain }`. See [Error Codes](#error-codes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `onUserExit`        | javascript function     | `function(error) {console.log(error)}`        | `function(error) {window.history.back()}`   | **required**<br> Callback function on _user exit_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | `ROI_MODE`          | string                  | `"landscape-landscape"`                       | `portrait-landscape`                        | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `SDK_MODE`          | string                  | `"autocapture"`                               | `"papercapture"`                            | **optional**<br> Specifies mode of the SDK, supported modes are: `"autocapture"`, `"papercapture"` (see [SDK Modes](#sdk-modes))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -222,7 +257,7 @@ AC.init({
 | **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                           | **EXAMPLE**                                 | **NOTES**                                                                                                               |
 | ------------- | ------------------- | ------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `onComplete`  | javascript function |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                    |
-| `onError`     | javascript function | `function(error) {console.log(error.code)}` | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, stack }`. See [Error Codes](#error-codes). |
+| `onError`     | javascript function | `function(error) {console.log(error.code)}` | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, message, stack, chain }`. See [Error Codes](#error-codes). |
 | `onUserExit`  | javascript function | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback that fires when the user exits the flow without completing it.                                |
 
 ### onComplete
@@ -452,6 +487,7 @@ Example:
 var LANGUAGE = {
     approval_prompt: "Is the image right?",
     capture_error: "We were unable to capture an image. Camera access is required.",
+    device_error: "This device is not supported.",
     camera_selection: "Please select the back camera",
     confirm: "Accept",
     continue: "Continue",
@@ -491,6 +527,7 @@ AC.init({
         {
             approval_prompt: "Is the image right?",
             capture_error: "We were unable to capture an image. Camera access is required.",
+            device_error: "This device is not supported.",
             camera_selection: "Please select the back camera",
             confirm: "Accept",
             continue: "Continue",
@@ -523,11 +560,21 @@ AC.init({
 
 ## Error Codes
 
-The `onError` callback receives an object `{ code, stack }`. The `code` follows the format `category:NNNN` (e.g., `capture_error:4004`). Use the category prefix to determine the type of error and the appropriate response.
+The `onError` callback receives an object with four properties:
+
+| Property  | Description |
+| --------- | ----------- |
+| `code`    | Structured code in the form `category:NNNN`, e.g. `capture_error:4004`. Branch on the category prefix |
+| `message` | Human-readable description of the failure |
+| `stack`   | Stack trace string. Include it when reporting to support |
+| `chain`   | Array tracing the causal chain, outermost first and root cause last. Each entry has `name`, `message`, optional `code` and `stack`. Where a browser error caused the failure, such as a `DOMException` from the camera, it appears here with its original `name` |
+
+Use the category prefix to determine the type of error and the appropriate response.
 
 | Category         | Description                                                                              | Recommended Action                                       |
 | ---------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `capture_error`  | Camera failure                                                                           | Show camera retry UI or prompt for permission            |
+| `capture_error`  | Camera failure. `4004` denied, `4007` no camera, `4008` camera in use, `4009` constraints unsatisfiable | Retry is worth offering for `4004` and `4008`, not for `4007`. The original `DOMException` appears in the error's `chain` |
+| `device_error`   | Device cannot run the SDK: no WebAssembly (`7002`) or no WebAssembly SIMD (`7003`). Surfaced before start. | Show "device not supported". Do **not** offer a retry; nothing will change. See [Unsupported devices](#unsupported-devices) |
 | `init_error`     | Initialization failed                                                                    | Prompt user to refresh the page                          |
 | `model_error`    | ML model failed to load                                                                  | Check network connection, retry initialization           |
 | `not_allowed`    | Deprecated: no longer emitted from capture (see [Allowed documents](#allowed-documents)) | No action needed; validate document type on your backend |
