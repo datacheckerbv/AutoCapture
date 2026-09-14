@@ -1,5 +1,13 @@
 # *CHANGELOG*
 
+## *CHANGES* v9.3.2
+
+### Changes
+
+- **Dutch passports are now captured when you request passports (Bug Fix)**: Requesting `PASSPORT` without also listing `DUTCH_PASSPORT` auto-captured every passport except Dutch ones. Dutch passports now follow your `PASSPORT` setting whenever `DUTCH_PASSPORT` is left out, `undefined` or `null`; setting it explicitly still overrides, so you can request different sides for Dutch passports. **Action:** none, unless you left `DUTCH_PASSPORT` out on purpose to keep Dutch passports from auto-capturing: that is no longer possible, they follow `PASSPORT`. See [Allowed documents](README.md#allowed-documents), which now also notes that the object you pass replaces the defaults rather than merging with them.
+- **Invalid `ALLOWED_DOCUMENTS` now reports why**: A configuration that failed validation was reported as `init_error:1001` with the message "Failed to initialize AutoCapture core" and no reason anywhere in the `onError` payload. It now reports `settings_error:2007` with every reason in `message`, for example `Invalid ALLOWED_DOCUMENTS: Document type 'PASSPORT' should not have an empty array.` A missing or null required setting, or an invalid `SDK_MODE`, likewise keeps its own message instead of the generic wrapper, and when something other than an `Error` is thrown internally its value is serialised into its `chain` entry where possible, instead of appearing as an empty message. **Action:** if you match on `init_error:1001` to detect a bad configuration, match on the `settings_error` prefix instead.
+- **An explicit `undefined` for an optional setting now means "not provided"**: `ALLOWED_DOCUMENTS: undefined` (typically a value spread in before its config has loaded) could either apply the default or fail validation depending on the browser. It now consistently applies the default, the same as leaving the setting out; this holds for every optional setting, so `SDK_MODE: undefined` runs `autocapture`. `CONTAINER_ID`, `TOKEN` or `LANGUAGE` passed as `undefined` is reported as `settings_error:2002` on every browser (previously `LANGUAGE: undefined` silently became `"nl"` on browsers without `structuredClone`). The callbacks are unchanged.
+
 ## *CHANGES* v9.3.1
 
 ### Changes

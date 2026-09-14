@@ -33,13 +33,13 @@ Using the latest browser versions will ensure that all modern JavaScript feature
 
 The SDK runs its image processing, document detection, glare classification and face detection in WebAssembly, and requires **WebAssembly SIMD**: the bundled OpenCV build is compiled for it, and the ONNX Runtime the detection models run on ships SIMD-only. There is no fallback for a device that lacks either: the SDK refuses to start rather than degrading.
 
-| Requirement       | Minimum version                                        |
-| ----------------- | ------------------------------------------------------ |
-| iOS / iPadOS      | **16.4** (all iOS browsers use WebKit, so this applies regardless of browser) |
-| Safari on macOS   | 16.4                                                   |
-| Chrome / Edge     | 91                                                     |
-| Firefox           | 89                                                     |
-| Android           | Chrome 91 + / Samsung Internet 16 + (the **browser** version matters, not the Android version) |
+| Requirement     | Minimum version                                                                                |
+| --------------- | ---------------------------------------------------------------------------------------------- |
+| Android         | Chrome 91 + / Samsung Internet 16 + (the **browser** version matters, not the Android version) |
+| Chrome / Edge   | 91                                                                                             |
+| Firefox         | 89                                                                                             |
+| iOS / iPadOS    | **16.4** (all iOS browsers use WebKit, so this applies regardless of browser)                  |
+| Safari on macOS | 16.4                                                                                           |
 
 Devices below these versions are refused with a `device_error` before the camera opens. See [Unsupported devices](#unsupported-devices).
 
@@ -53,9 +53,9 @@ Devices below these versions are refused with a `device_error` before the camera
 
 A device that cannot run the SDK is refused on the `onError` callback **before** the camera opens. Both codes share the `device_error` category, so the simplest integration branches on the prefix; the individual codes let you tailor the message.
 
-| Code                | Meaning                              | What to tell the user                                     |
-| ------------------- | ------------------------------------ | --------------------------------------------------------- |
-| `device_error:7002` | No WebAssembly at all                | Usually a restricted browser mode. On iOS, check whether Lockdown Mode is on |
+| Code                | Meaning                              | What to tell the user                                                                                                        |
+| ------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `device_error:7002` | No WebAssembly at all                | Usually a restricted browser mode. On iOS, check whether Lockdown Mode is on                                                 |
 | `device_error:7003` | WebAssembly present but without SIMD | On iOS: update to 16.4 or later, otherwise the device is too old. On Android: update the browser, or open the link in Chrome |
 
 **Do not offer a retry for either.** Nothing about the device changes between attempts. Recovery, where it exists, needs an action outside the page: an OS update, a browser update, or turning off Lockdown Mode.
@@ -137,7 +137,7 @@ To run this tool, you will need initialise with the following variables.
 | `LANGUAGE`          | string                  | `"nl"`                                        | `"nl"`                                      | **required**<br> Notifications in specific language.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | `LOGO`              | string / null           | (embedded DataChecker logo)                   | `"https://example.com/logo.png"`            | **optional**<br> White-label the footer logo. Provide an `https:` image URL, a relative path to a self-hosted image (e.g. `"assets/logo.png"`, resolved against your page), or an inline `data:image/...` URI, to show your own logo instead of the default DataChecker logo. Any web image format is accepted (PNG, JPG, WEBP, SVG, ...); the logo is rendered as an `<img>`, so an SVG file, URL, or `data:image/svg+xml` URI works like any other. Set to `null` to hide the footer logo entirely. Leave unset to keep the default. Unsafe values (`http:`, `javascript:`, protocol-relative `//host`, non-image `data:`) are ignored and the default is used. The logo is scaled to fit the footer, so a wide logo (similar to the default's proportions) displays best. |
 | `onComplete`        | javascript function     |                                               | `function(data) {console.log(data)}`        | **required**<br> Callback function on _complete_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `onError`           | javascript function     | `function(error) {console.log(error.code)}`   | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, message, stack, chain }`. See [Error Codes](#error-codes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `onError`           | javascript function     | `function(error) {console.log(error.code)}`   | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, message, stack, chain }`. See [Error Codes](#error-codes).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `onUserExit`        | javascript function     | `function(error) {console.log(error)}`        | `function(error) {window.history.back()}`   | **required**<br> Callback function on _user exit_.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | `ROI_MODE`          | string                  | `"landscape-landscape"`                       | `portrait-landscape`                        | **optional**<br> Frame orientation options: `"portrait-landscape"`, `"landscape-landscape"`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `SDK_MODE`          | string                  | `"autocapture"`                               | `"papercapture"`                            | **optional**<br> Specifies mode of the SDK, supported modes are: `"autocapture"`, `"papercapture"` (see [SDK Modes](#sdk-modes))                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -254,11 +254,11 @@ AC.init({
 });
 ```
 
-| **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                           | **EXAMPLE**                                 | **NOTES**                                                                                                               |
-| ------------- | ------------------- | ------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `onComplete`  | javascript function |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                    |
+| **ATTRIBUTE** | **FORMAT**          | **DEFAULT VALUE**                           | **EXAMPLE**                                 | **NOTES**                                                                                                                               |
+| ------------- | ------------------- | ------------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `onComplete`  | javascript function |                                             | `function(data) {console.log(data)}`        | **required**<br> Callback that fires when all interactive tasks in the workflow have been completed.                                    |
 | `onError`     | javascript function | `function(error) {console.log(error.code)}` | `function(error) {console.log(error.code)}` | **required**<br> Callback that fires when an error occurs. Receives `{ code, message, stack, chain }`. See [Error Codes](#error-codes). |
-| `onUserExit`  | javascript function | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback that fires when the user exits the flow without completing it.                                |
+| `onUserExit`  | javascript function | `function(error) {console.log(error)}`      | `function(error) {window.history.back()}`   | **required**<br> Callback that fires when the user exits the flow without completing it.                                                |
 
 ### onComplete
 
@@ -562,26 +562,26 @@ AC.init({
 
 The `onError` callback receives an object with four properties:
 
-| Property  | Description |
-| --------- | ----------- |
-| `code`    | Structured code in the form `category:NNNN`, e.g. `capture_error:4004`. Branch on the category prefix |
-| `message` | Human-readable description of the failure |
-| `stack`   | Stack trace string. Include it when reporting to support |
+| Property  | Description                                                                                                                                                                                                                                                      |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `chain`   | Array tracing the causal chain, outermost first and root cause last. Each entry has `name`, `message`, optional `code` and `stack`. Where a browser error caused the failure, such as a `DOMException` from the camera, it appears here with its original `name` |
+| `code`    | Structured code in the form `category:NNNN`, e.g. `capture_error:4004`. Branch on the category prefix                                                                                                                                                            |
+| `message` | Human-readable description of the failure                                                                                                                                                                                                                        |
+| `stack`   | Stack trace string. Include it when reporting to support                                                                                                                                                                                                         |
 
 Use the category prefix to determine the type of error and the appropriate response.
 
-| Category         | Description                                                                              | Recommended Action                                       |
-| ---------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `capture_error`  | Camera failure. `4004` denied, `4007` no camera, `4008` camera in use, `4009` constraints unsatisfiable | Retry is worth offering for `4004` and `4008`, not for `4007`. The original `DOMException` appears in the error's `chain` |
-| `device_error`   | Device cannot run the SDK: no WebAssembly (`7002`) or no WebAssembly SIMD (`7003`). Surfaced before start. | Show "device not supported". Do **not** offer a retry; nothing will change. See [Unsupported devices](#unsupported-devices) |
-| `init_error`     | Initialization failed                                                                    | Prompt user to refresh the page                          |
-| `model_error`    | ML model failed to load                                                                  | Check network connection, retry initialization           |
-| `not_allowed`    | Deprecated: no longer emitted from capture (see [Allowed documents](#allowed-documents)) | No action needed; validate document type on your backend |
-| `opencv_error`   | Required component failed to load                                                        | Prompt user to refresh or try a different browser        |
-| `runtime_error`  | Unexpected/generic runtime error                                                         | Show generic retry UI                                    |
-| `settings_error` | Invalid configuration or version mismatch                                                | Verify SDK configuration and assets                      |
-| `token_error`    | Token missing, invalid, or not permitted                                                 | Verify token credentials                                 |
+| Category         | Description                                                                                                           | Recommended Action                                                                                                          |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `capture_error`  | Camera failure. `4004` denied, `4007` no camera, `4008` camera in use, `4009` constraints unsatisfiable               | Retry is worth offering for `4004` and `4008`, not for `4007`. The original `DOMException` appears in the error's `chain`   |
+| `device_error`   | Device cannot run the SDK: no WebAssembly (`7002`) or no WebAssembly SIMD (`7003`). Surfaced before start.            | Show "device not supported". Do **not** offer a retry; nothing will change. See [Unsupported devices](#unsupported-devices) |
+| `init_error`     | Initialization failed                                                                                                 | Prompt user to refresh the page                                                                                             |
+| `model_error`    | ML model failed to load                                                                                               | Check network connection, retry initialization                                                                              |
+| `not_allowed`    | Deprecated: no longer emitted from capture (see [Allowed documents](#allowed-documents))                              | No action needed; validate document type on your backend                                                                    |
+| `opencv_error`   | Required component failed to load                                                                                     | Prompt user to refresh or try a different browser                                                                           |
+| `runtime_error`  | Unexpected/generic runtime error                                                                                      | Show generic retry UI                                                                                                       |
+| `settings_error` | Invalid configuration or version mismatch. `2007` is an invalid `ALLOWED_DOCUMENTS`; its `message` lists every reason | Verify SDK configuration and assets                                                                                         |
+| `token_error`    | Token missing, invalid, or not permitted                                                                              | Verify token credentials                                                                                                    |
 
 When reporting issues to support, include both `error.code` and `error.stack` — the numeric identifier in the code and the stack trace allow for precise diagnosis.
 
@@ -613,7 +613,7 @@ AC.init({
     ALLOWED_DOCUMENTS: {
         IDENTITY_CARD: ['FRONT', 'BACK'],     // Both front and back sides allowed
         PASSPORT: ['FRONT', 'BACK'],          // Both front and back sides allowed
-        DUTCH_PASSPORT: undefined,            // Inherits from PASSPORT settings
+        DUTCH_PASSPORT: undefined,            // Optional: omit it entirely and it follows PASSPORT
         RESIDENCE_PERMIT: ['FRONT', 'BACK'],  // Both front and back sides allowed
         DRIVING_LICENSE: ['FRONT', 'BACK'],   // Both front and back sides allowed
     },
@@ -641,6 +641,30 @@ ALLOWED_DOCUMENTS: {
 ```
 
 **Note**: A type not listed in `ALLOWED_DOCUMENTS`, or the wrong side of a single-sided request, is not auto-captured, but the SDK does not reject it. The person can still capture it with the manual button; DataChecker's document classification service decides during processing.
+
+**The object you pass replaces the defaults, it is not merged with them.** Whatever you leave out is not requested, with one exception: `DUTCH_PASSPORT` follows `PASSPORT` when left out (see [Dutch passports](#dutch-passports) below). If you want to change the sides for one type only, list every type you want auto-captured, not just the one you are changing. Passing `ALLOWED_DOCUMENTS: undefined` is the same as leaving the setting out entirely: the default set applies. (This holds for any optional setting; a required one passed as `undefined` is reported as an error.)
+
+### Dutch passports
+
+The SDK recognises a Dutch passport as its own type, `DUTCH_PASSPORT`, separately from `PASSPORT`. This exists so you can give Dutch passports different side rules from other passports, for example requesting only their front:
+
+```javascript
+ALLOWED_DOCUMENTS: {
+    PASSPORT: ['FRONT', 'BACK'],   // Other passports: both sides
+    DUTCH_PASSPORT: ['FRONT'],     // Dutch passports: front only
+}
+```
+
+If you do not need that distinction, you do not have to think about it: **when you request `PASSPORT` and give `DUTCH_PASSPORT` no value of its own, Dutch passports follow your `PASSPORT` setting.** Leaving the key out entirely, or setting it to `undefined` or `null`, all mean the same thing. So this requests every passport, Dutch ones included:
+
+```javascript
+ALLOWED_DOCUMENTS: {
+    IDENTITY_CARD: ['FRONT'],
+    PASSPORT: ['FRONT'],           // Dutch passports follow this
+}
+```
+
+Set `DUTCH_PASSPORT` explicitly only when you want it to differ from `PASSPORT`. It is the one type that can be requested without being listed, so requesting `PASSPORT` always requests Dutch passports too, on the same sides unless you say otherwise.
 
 ### Handling unknown documents
 
