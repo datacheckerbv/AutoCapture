@@ -1,5 +1,12 @@
 # *CHANGELOG*
 
+## *CHANGES* v9.3.3
+
+- **Camera preview no longer stays a narrow strip (Bug Fix)**: On iPhones with iOS 27, switching cameras, or leaving Safari during a session and coming back, could leave the live preview as a narrow band in the middle of the screen until the phone was rotated. The same could happen when the camera first opened. The preview now always fills the screen. Captured images were never affected. **Action:** none.
+- **Sharper auto-captures on iPhones in more languages (Bug Fix)**: On iPhones set to Arabic or Turkish the SDK did not choose the best back camera setting, so many photos came out blurred. The same camera choice now works in these and several other languages, among them Russian, Brazilian Portuguese, Greek, Chinese, Japanese, Polish and Italian. On iPhones in any other language the SDK now lets the phone choose its own back camera. **Action:** none.
+- **Shifted photos are retaken on Android (Bug Fix)**: On Android the picture can freeze for a second or more while the final photo is taken, on slower phones especially. If the phone or the document moved during that moment, the document could end up shifted, cut off or missing in the photo even though every check had passed. The SDK now checks where the document is in the photo and, if it moved or is missing, takes a new photo (up to three times per side). A photo that is blurred while the document stayed in place is not caught by this check. It does not apply to manual captures or iPhones. **Action:** none.
+- **No more stalled second side after the manual-capture tip (Bug Fix)**: When the manual-capture tip was due just as an automatic capture was being taken, the capture completed but the next side could not detect the document until the user switched cameras. The tip now waits until the capture has finished, and every side starts with detection running. **Action:** none.
+
 ## *CHANGES* v9.3.2
 
 ### Changes
@@ -69,8 +76,8 @@
 - **More Consistent Capture Performance**: Eliminated intermittent slow-frame spikes that could briefly stall capture, by reducing per-frame memory allocations in the processing pipeline. PaperCapture mode in particular runs noticeably more consistently.
 - **Sharper Captures on Modern Browsers**: On browsers that support the ImageCapture API (Chromium-based, e.g. Android Chrome), the live preview now streams at a lighter resolution for smoother, lower-overhead processing while the final document image is captured at the camera's full photo resolution. iOS Safari and older Android stream at high resolution as before, so saved-image quality is preserved everywhere.
 - **Smoother Animations**: The capture checkmark, tutorial prompts, and document-flip animations have been reworked to play reliably across devices. The checkmark in particular now plays its full animation even on devices with system-level "Remove animations" settings enabled.
-- **Bug Fix — Focus Check After Re-acquisition**: After the SDK briefly loses sight of a document (for example, when it moves out of the frame), the focus check now correctly re-baselines when the document is found again, preventing rare cases where users could get stuck in a re-check loop.
-- **Bug Fix — Unintended Page Scroll**: Fixed an issue where the SDK's mount container could be scrolled vertically on mobile and desktop, allowing users to drag past the capture UI. The SDK now reliably fills the viewport without exposing a scrollable area.
+- **Bug Fix: Focus Check After Re-acquisition**: After the SDK briefly loses sight of a document (for example, when it moves out of the frame), the focus check now correctly re-baselines when the document is found again, preventing rare cases where users could get stuck in a re-check loop.
+- **Bug Fix: Unintended Page Scroll**: Fixed an issue where the SDK's mount container could be scrolled vertically on mobile and desktop, allowing users to drag past the capture UI. The SDK now reliably fills the viewport without exposing a scrollable area.
 - **Support for new languages**: (see [Languages](README.md#languages))
   - Bulgarian (bg)
   - Czech (cz)
@@ -98,11 +105,11 @@
 
 ## *CHANGES* v7.2.0
 
-- **Richer `onError` Payload**: `onError` now receives `{ code, stack, message, chain }`. `message` and `chain` are new optional fields — the existing `code` and `stack` are unchanged so current integrations continue to work without modification.
+- **Richer `onError` Payload**: `onError` now receives `{ code, stack, message, chain }`. `message` and `chain` are new optional fields; the existing `code` and `stack` are unchanged so current integrations continue to work without modification.
   - `message`: human-readable description of the outermost error. Particularly useful on Safari/iOS, where the browser's `.stack` string does not include the message header (V8/Chrome prepends it; JavaScriptCore/Safari does not). Read `message` separately if you need the description cross-browser.
   - `chain`: array tracing the full causal chain, outermost first, root cause last. Each entry contains `name`, `message`, optional `code`, and `stack`. The root cause's `code` is usually the most actionable; chain depth is capped at 10 to bound payload size. See [Error Codes](ERROR_CODES.md) for the full shape.
-- **Single Reporting Channel**: All internal errors are now reported exclusively through `onError`. `init()` no longer rejects on failure — consumers that previously relied on `await sdk.init().catch(...)` will not receive errors that way; they will arrive through `onError` instead. Adding `.catch()` on `init()` is no longer necessary and will not surface error events. This change removes duplicate logging and prevents unhandled promise rejections in consumers that did not wrap `init()`.
-- **Log-Level Convention Documented**: The category prefix of each `code` (`init_error`, `capture_error`, `model_error`, etc.) maps to a recommended log severity (`ERROR`, `WARN`, `INFO`). See [Log-level convention](ERROR_CODES.md#log-level-convention) for the mapping — useful for routing capture errors to alerting and reserving `INFO` for user-driven events like `exit`.
+- **Single Reporting Channel**: All internal errors are now reported exclusively through `onError`. `init()` no longer rejects on failure: consumers that previously relied on `await sdk.init().catch(...)` will not receive errors that way; they will arrive through `onError` instead. Adding `.catch()` on `init()` is no longer necessary and will not surface error events. This change removes duplicate logging and prevents unhandled promise rejections in consumers that did not wrap `init()`.
+- **Log-Level Convention Documented**: The category prefix of each `code` (`init_error`, `capture_error`, `model_error`, etc.) maps to a recommended log severity (`ERROR`, `WARN`, `INFO`). See [Log-level convention](ERROR_CODES.md#log-level-convention) for the mapping, useful for routing capture errors to alerting and reserving `INFO` for user-driven events like `exit`.
 
 ## *CHANGES* v7.1.0
 

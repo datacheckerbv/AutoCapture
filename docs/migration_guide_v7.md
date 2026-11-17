@@ -37,7 +37,7 @@ AC.init({
 
 ## Error code categories
 
-Use the category prefix of `error.code` to determine the type of error. The numeric suffix is for support diagnostics — include it when reporting issues.
+Use the category prefix of `error.code` to determine the type of error. The numeric suffix is for support diagnostics: include it when reporting issues.
 
 | Category         | Description                               | Recommended action                                |
 | ---------------- | ----------------------------------------- | ------------------------------------------------- |
@@ -51,7 +51,7 @@ Use the category prefix of `error.code` to determine the type of error. The nume
 
 ## New language keys
 
-Five new keys were added for error category messages. Custom language files do not need to include them — the SDK falls back to English defaults — but adding them provides translated messages in the overlay.
+Five new keys were added for error category messages. Custom language files do not need to include them (the SDK falls back to English defaults), but adding them provides translated messages in the overlay.
 
 ```javascript
 var LANGUAGE = {
